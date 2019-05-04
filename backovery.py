@@ -283,9 +283,9 @@ def recovery():
             print
             print "Processo avviato..."
             print
-            command = "sudo pv /mnt/backup/%s | tar --xattrs -xpzf - -C /mnt --numeric-owner 2>recovery.log"
+            command = "sudo tar -xpzf /mnt/backup/%s -C /mnt --numeric-owner --checkpoint=.1000 2>recovery.log"
             os.system(command % (var))
-            subprocess.call("rm -rf /mnt/backup", shell=True)
+            subprocess.call("sudo rm -rf /mnt/backup", shell=True)
             subprocess.call("cd /", shell=True)
             subprocess.call("sudo umount /mnt", shell=True)
             print
