@@ -104,6 +104,7 @@ def backup():
                     print
                     print
                     print "Processo avviato..."
+                    print
                     command = "sudo tar --xattrs -cpzf - %s --one-file-system / 2>backup.log | pv -p --timer --rate --bytes > backup/backup_%s.tgz"
                     os.system(command % (exc, data))
                     print
@@ -146,6 +147,7 @@ def backup():
                     print
                     print
                     print "Processo avviato..."
+                    print
                     command = "su root -c 'tar --xattrs -cpzf - %s --one-file-system / 2>backup.log | pv -p --timer --rate --bytes > backup/backup_%s.tgz'"
                     os.system(command % (exc, data))
                     print
@@ -194,6 +196,7 @@ def remote():
                     print
                     print
                     print "Processo avviato..."
+                    print
                     command = "sudo tar -cvpz --xattrs backup/backup_%s.tgz %s --one-file-system / 1 2>net_backup.log | pv | nc -q 0 %s %s"
                     os.system(command % (data, exc, address, port))
                     print
@@ -238,6 +241,7 @@ def remote():
                   print
                   print
                   print "Processo avviato..."
+                  print
                   command = "su root -c 'tar --xattrs -cvpz backup/backup_%s.tgz %s --one-file-system / 1 2>net_backup.log | pv | nc -q 0 %s %s'"
                   os.system(command % (data, exc, address, port))
                   print
