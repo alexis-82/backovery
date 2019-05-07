@@ -261,10 +261,10 @@ def recovery():
             print
             subprocess.call("lsblk", shell=True)
             print
-            partition = raw_input("Quale partizione vuoi ripristinare? (es. /dev/sda1) ")
-            fsck = "sudo fsck -y %s"
+            partition = raw_input("Quale partizione vuoi ripristinare? (es. sda1) ")
+            fsck = "sudo fsck -y /dev/%s"
             os.system(fsck % (partition))
-            mount = "sudo mount -t auto %s /mnt"
+            mount = "sudo mount -t auto /dev/%s /mnt"
             os.system(mount % (partition))
             subprocess.call("sudo chown user.user /mnt", shell=True)
             subprocess.call("mkdir /mnt/backup", shell=True)
