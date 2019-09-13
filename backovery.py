@@ -3,7 +3,7 @@
 # Version Python 2.7.*
 
 import os, sys, subprocess, time
-from lib import Fore, Back, Style
+from lib import Fore, Back, Style, init
 
 subprocess.call("clear && clear", shell=True)
 
@@ -11,10 +11,14 @@ nodir = open("exclude","r")
 exc = nodir.read()
 nodir.close()
 
+init(autoreset=True)
 
 data = (time.strftime("%d_%m_%Y"))
 directory = "$(pwd)"
-check_file = os.path.exists("/etc/sudoers")
+log = os.system("grep -om1 sudo $HOME/.bash_history > id")
+check = open("id", "r")
+root = check.read(4 - 0)
+
 
 print
 print (Fore.GREEN + "   ______    ____     ____  __   ___  ____   __    __   _____ ______ __      __ ")
@@ -24,10 +28,10 @@ print (Fore.GREEN + "    \   _/ ( (__) )( (     ()   (  ( ()  () )\ \  / /  ) __
 print (Fore.GREEN + "    /  _ \  )    ( ( (     () /\ \ ( ()  () ) \ \/ /  ( (     ) \ \  _  \  /    ")
 print (Fore.GREEN + "   _) (_) )/  /\  \ \ \___ ( (  \ \ \ \__/ /   \  /    \ \___( ( \ \_))  )(     ")
 print (Fore.GREEN + "  (______//__(  )__\ \____)()_)  \_\ \____/     \/      \____\)_) \__/  /__\    ")
-print (Fore.RESET)
+print
 print (Fore.RED + "                                  Coded by Alexis                                 ")
 print (Fore.RED + "                                http://alexis82.it/                               ")
-print (Fore.RESET)
+print
 print
 
 print
@@ -69,7 +73,10 @@ def backup():
         print
         print "INIZIO PROCEDURA, NON INTERROMPERE..."
         print
-        if check_file is True:
+        if root == "sudo":
+            print
+            print "Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root)
+            print
             print
             print "PULIZIA DEL SISTEMA"
             print
@@ -84,7 +91,7 @@ def backup():
                 kernel = raw_input("Vuoi rimuovere delle vecchie versioni di kernel per ottimizzare il backup? [si/no] ")
                 if kernel == 'si' or kernel == 's':
                     print
-                    print (Fore.RED + "Kernel attualmente utilizzato:" + Fore.RESET)
+                    print (Fore.RED + "Kernel attualmente utilizzato:")
                     os.system("uname -r")
                     print
                     print "Lista di tutti i kernel presenti nel sistema:"
@@ -92,7 +99,7 @@ def backup():
                     os.system(lista)
                     print
                     print
-                    print (Fore.RED + "ATTENZIONE - NON DISINSTALLARE IL KERNEL ATTUALMENTE IN USO" + Fore.RESET)
+                    print (Fore.RED + "ATTENZIONE - NON DISINSTALLARE IL KERNEL ATTUALMENTE IN USO")
                     uninstall = raw_input("Specificare il kernel da rimuovere: ")
                     command = "sudo apt-get purge %s"
                     os.system(command % (uninstall))
@@ -112,7 +119,10 @@ def backup():
                     raw_input("Backup terminato, premere un tasto per uscire!")
                     return
                     os.system("clear && clear")
-        if check_file is False:
+        if root == "su":
+            print
+            print "Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root)
+            print
             print
             print "PULIZIA DEL SISTEMA"
             print
@@ -122,12 +132,12 @@ def backup():
             while select:
                 # Riconoscimento sistema
                 print
-                print "Sistema riconosciuto su"
+                print
                 print
                 kernel = raw_input("Vuoi rimuovere delle vecchie versioni di kernel per ottimizzare il backup? [si/no] ")
                 if kernel == 'si' or kernel == 's':
                     print
-                    print (Fore.RED + "Kernel attualmente utilizzato:" + Fore.RESET)
+                    print (Fore.RED + "Kernel attualmente utilizzato:")
                     os.system("uname -r")
                     print
                     print "Lista di tutti i kernel presenti nel sistema:"
@@ -135,7 +145,7 @@ def backup():
                     os.system(lista)
                     print
                     print
-                    print (Fore.RED + "ATTENZIONE - NON DISINSTALLARE IL KERNEL ATTUALMENTE IN USO" + Fore.RESET)
+                    print (Fore.RED + "ATTENZIONE - NON DISINSTALLARE IL KERNEL ATTUALMENTE IN USO")
                     uninstall = raw_input("Specificare il kernel da rimuovere: ")
                     command = "su root -c 'apt-get purge %s'"
                     os.system(command % (uninstall))
@@ -160,21 +170,20 @@ backup()
 def remote():
     if select == 2:
         print
-        print (Fore.RED + "- !ATTENZIONE! - " + Fore.RESET)
-        print (Fore.RED + "Con questo sistema potete inviare il file di backup direttamente su un altro computer o server"+ Fore.RESET)
-        print (Fore.RED + "senza salvare alcun dato sul sistema locale!"+ Fore.RESET)
-        print (Fore.RED + "Scompattare il file remote.tar nel server e avviatelo" + Fore.RESET)
+        print (Fore.RED + "- !ATTENZIONE! - ")
+        print (Fore.RED + "Con questo sistema potete inviare il file di backup direttamente su un altro computer o server")
+        print (Fore.RED + "senza salvare alcun dato sul sistema locale!")
+        print (Fore.RED + "Scompattare il file remote.tar nel server e avviatelo")
         print
-        if check_file is True:
-            while select:
-                # Riconoscimento sistema
+        if root == "sudo":
                 print
-                print "Sistema riconosciuto sudo"
+                print "Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root)
+                print
                 print
                 kernel = raw_input("Vuoi rimuovere delle vecchie versioni di kernel per ottimizzare il backup? [si/no] ")
                 if kernel == 'si' or kernel == 's':
                     print
-                    print (Fore.RED + "Kernel attualmente utilizzato:" + Fore.RESET)
+                    print (Fore.RED + "Kernel attualmente utilizzato:")
                     os.system("uname -r")
                     print
                     print "Lista di tutti i kernel presenti nel sistema:"
@@ -182,7 +191,7 @@ def remote():
                     os.system(lista)
                     print
                     print
-                    print (Fore.RED + "ATTENZIONE - NON DISINSTALLARE IL KERNEL ATTUALMENTE IN USO" + Fore.RESET)
+                    print (Fore.RED + "ATTENZIONE - NON DISINSTALLARE IL KERNEL ATTUALMENTE IN USO")
                     uninstall = raw_input("Specificare il kernel da rimuovere: ")
                     command = "sudo apt-get purge %s"
                     os.system(command % (uninstall))
@@ -204,7 +213,11 @@ def remote():
                     raw_input("Backup remoto terminato, premere un tasto per uscire!")
                     os.system("clear && clear")
                     return
-        if check_file is False:
+        if root == "su":
+            print
+            print "Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root)
+            print
+            print            
             print
             print "PULIZIA DEL SISTEMA"
             print
@@ -214,12 +227,12 @@ def remote():
             while select:
                 # Riconoscimento sistema
                 print
-                print "Sistema riconosciuto su"
+                print
                 print
                 kernel = raw_input("Vuoi rimuovere delle vecchie versioni di kernel per ottimizzare il backup? [si/no] ")
                 if kernel == 'si' or kernel == 's':
                     print
-                    print (Fore.RED + "Kernel attualmente utilizzato:" + Fore.RESET)
+                    print (Fore.RED + "Kernel attualmente utilizzato:")
                     os.system("uname -r")
                     print
                     print "Lista di tutti i kernel presenti nel sistema:"
@@ -227,7 +240,7 @@ def remote():
                     os.system(lista)
                     print
                     print
-                    print (Fore.RED + "ATTENZIONE - NON DISINSTALLARE IL KERNEL ATTUALMENTE IN USO" + Fore.RESET)
+                    print (Fore.RED + "ATTENZIONE - NON DISINSTALLARE IL KERNEL ATTUALMENTE IN USO")
                     uninstall = raw_input("Specificare il kernel da rimuovere: ")
                     command = "su root -c 'apt-get purge %s'"
                     os.system(command % (uninstall))
@@ -253,11 +266,11 @@ remote()
 
 def recovery():
     if select == 3:
-        if check_file is True:
+        if root == "sudo":
             print
             print (Fore.MAGENTA + "Montare Unità")
             print (Fore.MAGENTA + "-------------")
-            print (Fore.RESET)
+            print
             print
             subprocess.call("lsblk", shell=True)
             print
@@ -274,7 +287,7 @@ def recovery():
             print
             print (Fore.MAGENTA + "Lista Backup")
             print (Fore.MAGENTA + "------------")
-            print (Fore.RESET)
+            print
             print
             os.system("cd /mnt/backup && ls *.tgz")
             print
@@ -294,6 +307,47 @@ def recovery():
             raw_input("Premere un tasto per uscire, potete riavviare il computer!")
             os.system("clear && clear")
             return
+        if root == "su":
+            print
+            print (Fore.MAGENTA + "Montare Unità")
+            print (Fore.MAGENTA + "-------------")
+            print
+            print
+            subprocess.call("lsblk", shell=True)
+            print
+            partition = raw_input("Quale partizione vuoi ripristinare? (es. sda1) ")
+            fsck = "su root -c 'fsck -y /dev/%s'"
+            os.system(fsck % (partition))
+            mount = "su root -c 'mount -t auto /dev/%s /mnt'"
+            os.system(mount % (partition))
+            subprocess.call("su root -c 'chown user.user /mnt'", shell=True)
+            subprocess.call("mkdir /mnt/backup", shell=True)
+            print
+            print
+            raw_input("Trasferire il file di backup nella cartella /mnt/backup e premere il tasto INVIO")
+            print
+            print (Fore.MAGENTA + "Lista Backup")
+            print (Fore.MAGENTA + "------------")
+            print
+            print
+            os.system("cd /mnt/backup && ls *.tgz")
+            print
+            var = raw_input("Digitare un backup presente in lista: ")
+            time.sleep(2)
+            print
+            print "Processo avviato..."
+            print
+            command = "su root -c 'tar -xpzf /mnt/backup/%s -C /mnt --numeric-owner --checkpoint=.1000 2>recovery.log'"
+            os.system(command % (var))
+            subprocess.call("su root -c 'rm -rf /mnt/backup'", shell=True)
+            subprocess.call("cd /", shell=True)
+            subprocess.call("su root -c 'umount /mnt'", shell=True)
+            print
+            print (Fore.GREEN + "Processo terminato.")
+            print (Fore.RESET)
+            raw_input("Premere un tasto per uscire, potete riavviare il computer!")
+            os.system("clear && clear")
+            return
 recovery()
 
 def manager():
@@ -307,10 +361,10 @@ def manager():
         print (Fore.GREEN + "    /  _ \  )    ( ( (     () /\ \ ( ()  () ) \ \/ /  ( (     ) \ \  _  \  /    ")
         print (Fore.GREEN + "   _) (_) )/  /\  \ \ \___ ( (  \ \ \ \__/ /   \  /    \ \___( ( \ \_))  )(     ")
         print (Fore.GREEN + "  (______//__(  )__\ \____)()_)  \_\ \____/     \/      \____\)_) \__/  /__\    ")
-        print (Fore.RESET)
+        print
         print (Fore.RED + "                                  Coded by Alexis                                 ")
         print (Fore.RED + "                                http://alexis82.it/                               ")
-        print (Fore.RESET)
+        print
         print
         print
         print "[1] Dividere"
