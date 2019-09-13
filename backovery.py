@@ -86,7 +86,7 @@ def backup():
             while select:
                 # Riconoscimento sistema
                 print
-                print "Sistema riconosciuto sudo"
+                print
                 print
                 kernel = raw_input("Vuoi rimuovere delle vecchie versioni di kernel per ottimizzare il backup? [si/no] ")
                 if kernel == 'si' or kernel == 's':
