@@ -15,9 +15,15 @@ init(autoreset=True)
 
 data = (time.strftime("%d_%m_%Y"))
 directory = "$(pwd)"
-log = os.system("grep -om1 sudo $HOME/.bash_history > id")
-check = open("id", "r")
-root = check.read(4 - 0)
+
+id1 = os.system ("grep -wom1 'sudo' $HOME/.bash_history > id")
+file = open("id", "r")
+root1 = file.read(4 - 0)
+
+if os.stat("id").st_size == 0:
+    id2 = os.system ("grep -wom1 'su' $HOME/.bash_history > id")
+    file = open("id", "r")
+    root2 = file.read(4 - 0)
 
 
 print
@@ -73,7 +79,7 @@ def backup():
         print
         print "INIZIO PROCEDURA, NON INTERROMPERE..."
         print
-        if root == "sudo":
+        if root1 == "sudo":
             print
             print "Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root)
             print
@@ -119,7 +125,7 @@ def backup():
                     raw_input("Backup terminato, premere un tasto per uscire!")
                     return
                     os.system("clear && clear")
-        if root == "su":
+        if root2 == "su":
             print
             print "Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root)
             print
@@ -175,7 +181,7 @@ def remote():
         print (Fore.RED + "senza salvare alcun dato sul sistema locale!")
         print (Fore.RED + "Scompattare il file remote.tar nel server e avviatelo")
         print
-        if root == "sudo":
+        if root1 == "sudo":
                 print
                 print "Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root)
                 print
@@ -213,18 +219,17 @@ def remote():
                     raw_input("Backup remoto terminato, premere un tasto per uscire!")
                     os.system("clear && clear")
                     return
-        if root == "su":
-            print
-            print "Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root)
-            print
-            print            
-            print
-            print "PULIZIA DEL SISTEMA"
-            print
-            os.system("su root -c 'apt-get autoremove' && su root -c 'apt-get clean' && su root -c 'apt-get autoclean'")
-            os.system("su root -c 'rm -rf /tmp/*'")
-            print
-            while select:
+        if root2 == "su":
+                print
+                print "Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root)
+                print
+                print            
+                print
+                print "PULIZIA DEL SISTEMA"
+                print
+                os.system("su root -c 'apt-get autoremove' && su root -c 'apt-get clean' && su root -c 'apt-get autoclean'")
+                os.system("su root -c 'rm -rf /tmp/*'")
+                print
                 # Riconoscimento sistema
                 print
                 print
@@ -266,7 +271,7 @@ remote()
 
 def recovery():
     if select == 3:
-        if root == "sudo":
+        if root1 == "sudo":
             print
             print (Fore.MAGENTA + "Montare Unità")
             print (Fore.MAGENTA + "-------------")
@@ -307,7 +312,7 @@ def recovery():
             raw_input("Premere un tasto per uscire, potete riavviare il computer!")
             os.system("clear && clear")
             return
-        if root == "su":
+        if root2 == "su":
             print
             print (Fore.MAGENTA + "Montare Unità")
             print (Fore.MAGENTA + "-------------")
