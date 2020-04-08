@@ -76,14 +76,17 @@ except UnboundLocalError:
 
 def backup():
     if select == 1:
+        sleep(2)
         print
         print "INIZIO PROCEDURA, NON INTERROMPERE..."
         print
         if root1 == "sudo":
+            sleep(2)
             print
-            print "Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root)
+            print "Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root1)
             print
             print
+            sleep(1)
             print "PULIZIA DEL SISTEMA"
             print
             os.system("sudo apt-get autoremove && sudo apt-get clean && sudo apt-get autoclean")
@@ -126,10 +129,12 @@ def backup():
                     return
                     os.system("clear && clear")
         if root2 == "su":
+            sleep(2)
             print
-            print "Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root)
+            print "Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root2)
             print
             print
+            sleep(1)
             print "PULIZIA DEL SISTEMA"
             print
             os.system("su root -c 'apt-get autoremove' && su root -c 'apt-get clean' && su root -c 'apt-get autoclean'")
@@ -182,10 +187,12 @@ def remote():
         print (Fore.RED + "Scompattare il file remote.tar nel server e avviatelo")
         print
         if root1 == "sudo":
+            sleep(2)
                 print
-                print "Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root)
+                print "Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root1)
                 print
                 print
+                sleep(1)
                 kernel = raw_input("Vuoi rimuovere delle vecchie versioni di kernel per ottimizzare il backup? [si/no] ")
                 if kernel == 'si' or kernel == 's':
                     print
@@ -220,11 +227,13 @@ def remote():
                     os.system("clear && clear")
                     return
         if root2 == "su":
+                sleep(2)
                 print
-                print "Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root)
+                print "Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root2)
                 print
                 print            
                 print
+                sleep(1)
                 print "PULIZIA DEL SISTEMA"
                 print
                 os.system("su root -c 'apt-get autoremove' && su root -c 'apt-get clean' && su root -c 'apt-get autoclean'")
@@ -234,6 +243,7 @@ def remote():
                 print
                 print
                 print
+                sleep(1)
                 kernel = raw_input("Vuoi rimuovere delle vecchie versioni di kernel per ottimizzare il backup? [si/no] ")
                 if kernel == 'si' or kernel == 's':
                     print
@@ -254,19 +264,19 @@ def remote():
                     print
                     os.system("su root -c 'apt-get autoremove' && su root -c 'apt-get clean' && su root -c 'apt-get autoclean'")
                 if kernel == 'no' or kernel == 'n':
-                  address = raw_input("Digitare l'indirizzo IP di destinazione: ")
-                  port = input("Digitare la porta: ")
-                  print
-                  print
-                  print "Processo avviato..."
-                  print
-                  command = "su root -c 'tar --xattrs -cvpz backup/backup_%s.tgz %s --one-file-system / 1 2>net_backup.log | pv | nc -q 0 %s %s'"
-                  os.system(command % (data, exc, address, port))
-                  print
-                  print
-                  raw_input("Backup remoto terminato, premere un tasto per uscire!")
-                  os.system("clear && clear")
-                  return
+                    address = raw_input("Digitare l'indirizzo IP di destinazione: ")
+                    port = input("Digitare la porta: ")
+                    print
+                    print
+                    print "Processo avviato..."
+                    print
+                    command = "su root -c 'tar --xattrs -cvpz backup/backup_%s.tgz %s --one-file-system / 1 2>net_backup.log | pv | nc -q 0 %s %s'"
+                    os.system(command % (data, exc, address, port))
+                    print
+                    print
+                    raw_input("Backup remoto terminato, premere un tasto per uscire!")
+                    os.system("clear && clear")
+                    return
 remote()
 
 def recovery():
@@ -471,5 +481,3 @@ def close():
         subprocess.call("clear", shell=True)
         return
 close()
-
-
