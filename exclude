@@ -1,1 +1,7 @@
---exclude=/proc --exclude=/lost+found --exclude=backup/* --exclude=/mnt --exclude=/sys --exclude=/var/spool --exclude=/media
+/proc
+/lost+found
+backup/*
+/mnt
+/sys
+/var/spool
+/media

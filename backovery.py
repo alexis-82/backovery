@@ -85,6 +85,7 @@ def backup():
             print("Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root1))
             print()
             print()
+            os.system("rm id")
             time.sleep(1)
             print("PULIZIA DEL SISTEMA")
             print()
@@ -120,7 +121,7 @@ def backup():
                     print()
                     print("Processo avviato...")
                     print()
-                    command = "sudo tar --xattrs -cpzf - %s --one-file-system / 2>backup.log | pv -p --timer --rate --bytes > backup/backup_%s.tgz"
+                    command = "sudo tar --xattrs -cpzf - -X %s --one-file-system / 2>backup.log | pv -p --timer --rate --bytes > backup/backup_%s.tgz"
                     os.system(command % (exc, data))
                     print()
                     print()
@@ -133,6 +134,7 @@ def backup():
             print("Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root2))
             print()
             print()
+            os.system("rm id")
             time.sleep(1)
             print("PULIZIA DEL SISTEMA")
             print()
@@ -168,7 +170,7 @@ def backup():
                     print()
                     print("Processo avviato...")
                     print()
-                    command = "su root -c 'tar --xattrs -cpzf - %s --one-file-system / 2>backup.log | pv -p --timer --rate --bytes > backup/backup_%s.tgz'"
+                    command = "su root -c 'tar --xattrs -cpzf - -X %s --one-file-system / 2>backup.log | pv -p --timer --rate --bytes > backup/backup_%s.tgz'"
                     os.system(command % (exc, data))
                     print()
                     print()
