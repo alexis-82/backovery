@@ -1,43 +1,45 @@
 # Configuration file Backovery
 >System of backup and recovery
 
+Required Python3.x with PiP
+
 
 ### <span style="color:red">BACKUP</span>
 
 
 * **Step 1**	
-Install package pv and git
+Install package pv and colorama
 
 ```
-    $ sudo apt-get install pv git
+pip install -r requirements.txt 
 ```
 
 * **Step 2**	
 Download Backovery
 
 ```
-    $ git clone https://github.com/alexis-82/backovery.git
+git clone https://github.com/alexis-82/backovery.git
 ```
 
 * **Step 3**	
 Exclude folders in file exclude ex. syntax =--exclude=/proc
 
 ```
-     # vim exclude
+vim excludes
 ```
 
 * **Step 4**	
 Run file backovery.py
 
 ```
-     $ python backovery.py
+python backovery.py
 ```
 
 * **Step 5**	
 This folder contains the backup:
 
 ```
-     $ cd backup/
+cd backup/
 ```	
 
 
@@ -46,20 +48,20 @@ This folder contains the backup:
 Install package pv
 
 ```
-    $ sudo apt-get update
+sudo apt-get update
 ```
 ```
-    $ sudo apt-get install pv git
+pip install -r requirements.txt 
 ```
 * **Step 2**	
 Download Backovery
 
 ```
-    $ git clone https://github.com/alexis-82/backovery.git
+git clone https://github.com/alexis-82/backovery.git
 ```
 * **Step 2**	
 Run file backovery.py
 
 ```
-     # python backovery.py
+python backovery.py
 ```
