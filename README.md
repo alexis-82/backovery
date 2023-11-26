@@ -1,7 +1,7 @@
 # Configuration file Backovery
 >System of backup and recovery
 
-Required Python3.x with PiP
+Required Python3.x with pip
 
 
 ### <span style="color:red">BACKUP</span>
