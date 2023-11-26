@@ -5,3 +5,5 @@ backup/*
 /sys
 /var/spool
 /media
+/var/log
+/opt

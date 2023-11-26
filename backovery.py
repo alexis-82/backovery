@@ -4,6 +4,8 @@
 import os, sys, subprocess, time
 from lib import Fore, Back, Style, init
 
+sys.stdout.write("\x1b[8;{rows};{cols}t".format(rows=40, cols=90))
+
 subprocess.call("clear && clear", shell=True)
 
 #nodir = open("excludes","r")
@@ -483,6 +485,7 @@ manager()
 
 def close():
     if select == 0:
+        os.system("rm id")
         subprocess.call("clear", shell=True)
         return
 close()
