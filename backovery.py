@@ -6,9 +6,9 @@ from lib import Fore, Back, Style, init
 
 subprocess.call("clear && clear", shell=True)
 
-nodir = open("exclude","r")
-exc = nodir.read()
-nodir.close()
+#nodir = open("excludes","r")
+#exc = nodir.read()
+#nodir.close()
 
 init(autoreset=True)
 
@@ -121,8 +121,9 @@ def backup():
                     print()
                     print("Processo avviato...")
                     print()
-                    command = "sudo tar --xattrs -cpzf - -X %s --one-file-system / 2>backup.log | pv -p --timer --rate --bytes > backup/backup_%s.tgz"
-                    os.system(command % (exc, data))
+                    # Se si vuole una maggior compressione sostituire il flag -cpf con -zcpf
+                    command = "sudo tar --xattrs -cpf - --exclude-from='excludes' --one-file-system / 2>backup.log | pv -p --timer --rate --bytes > backup/backup_%s.tgz" % (data)
+                    subprocess.call(command, shell=True)
                     print()
                     print()
                     input("Backup terminato, premere un tasto per uscire!")
@@ -170,8 +171,9 @@ def backup():
                     print()
                     print("Processo avviato...")
                     print()
-                    command = "su root -c 'tar --xattrs -cpzf - -X %s --one-file-system / 2>backup.log | pv -p --timer --rate --bytes > backup/backup_%s.tgz'"
-                    os.system(command % (exc, data))
+                    # Se si vuole una maggior compressione sostituire il flag -cpf con -zcpf
+                    command = "su root -c 'tar --xattrs -cpf - --exclude-from='excludes' --one-file-system / 2>backup.log | pv -p --timer --rate --bytes > backup/backup_%s.tgz'"
+                    os.system(command % (data))
                     print()
                     print()
                     input("Backup terminato, premere un tasto per uscire!")
@@ -221,8 +223,8 @@ def remote():
                 print()
                 print("Processo avviato...")
                 print()
-                command = "sudo tar -cvpz --xattrs backup/backup_%s.tgz %s --one-file-system / 1 2>net_backup.log | pv | nc -q 0 %s %s"
-                os.system(command % (data, exc, address, port))
+                command = "sudo tar -cvpz --xattrs backup/backup_%s.tgz --exclude-from='excludes' --one-file-system / 1 2>net_backup.log | pv | nc -q 0 %s %s"
+                os.system(command % (data, address, port))
                 print()
                 print()
                 eval(input("Backup remoto terminato, premere un tasto per uscire!"))
@@ -272,8 +274,8 @@ def remote():
                 print()
                 print("Processo avviato...")
                 print()
-                command = "su root -c 'tar --xattrs -cvpz backup/backup_%s.tgz %s --one-file-system / 1 2>net_backup.log | pv | nc -q 0 %s %s'"
-                os.system(command % (data, exc, address, port))
+                command = "su root -c 'tar -cvpz --xattrs backup/backup_%s.tgz --exclude-from='excludes' --one-file-system / 1 2>net_backup.log | pv | nc -q 0 %s %s'"
+                os.system(command % (data, address, port))
                 print()
                 print()
                 eval(input("Backup remoto terminato, premere un tasto per uscire!"))
