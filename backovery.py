@@ -44,12 +44,14 @@ print()
 print()
 print("Seleziona un numero")
 print()
-print("[1] Backup")
-print("[2] Backup Remoto")
+print("[1] Esporta pacchetti")
 print()
-print("[3] Recovery")
+print("[2] Backup")
+print("[3] Backup Remoto")
 print()
-print("[4] Gestore")
+print("[4] Recovery")
+print()
+print("[5] Gestore")
 print()
 print()
 print("[0] Esci")
@@ -57,26 +59,61 @@ print()
 
 try:
     select = eval(input(": "))
-    if select >= 5:
+    if select >= 6:
         print()
         print("Opzione non trovata!")
         input("Premere un tasto per contiuare")
-        os.system("python backovery.py")
+        os.system("python3 backovery.py")
 except NameError:
     print()
     print("Comando non valido!")
     input("Premere un tasto per continuare")
-    os.system("python backovery.py")
+    os.system("python3 backovery.py")
 except SyntaxError:
     print()
     print("Comando non valido!")
     input("Premere un tasto per continuare")
-    os.system("python backovery.py")
+    os.system("python3 backovery.py")
 except UnboundLocalError:
     print("Sistema terminato")
 
-def backup():
+
+def esporta():
     if select == 1:
+        time.sleep(2)
+        print()
+        print("INIZIO PROCEDURA, NON INTERROMPERE...")
+        print()
+        if root1 == "sudo":
+            time.sleep(2)
+            print()
+            print("Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root1))
+            print()
+            print()
+            os.system("rm id")
+            time.sleep(1)
+            os.system("sudo apt-mark showmanual | grep -vE 'linux-(generic|headers|image|modules)' > backup/packages_%s.txt" % (data))
+            input("File generato, premere un tasto per tornare indietro!")
+            os.system("clear && clear")
+            os.system("python3 backovery.py")
+            return
+        if root2 == "su":
+            time.sleep(2)
+            print()
+            print("Sistema riconosciuto: ", (Fore.GREEN + Style.BRIGHT + root2))
+            print()
+            print()
+            os.system("rm id")
+            time.sleep(1)
+            os.system("su root -c 'aapt-mark showmanual | grep -vE 'linux-(generic|headers|image|modules)' > backup/packages_%s.txt'") % (data)
+            input("File generato, premere un tasto per tornare indietro!")
+            os.system("clear && clear")
+            os.system("python3 backovery.py")
+            return
+esporta()
+
+def backup():
+    if select == 2:
         time.sleep(2)
         print()
         print("INIZIO PROCEDURA, NON INTERROMPERE...")
@@ -123,14 +160,14 @@ def backup():
                     print()
                     print("Processo avviato...")
                     print()
-                    # Se si vuole una maggior compressione sostituire il flag -cpf con -zcpf
-                    command = "sudo tar --xattrs -cpf - --exclude-from='excludes' --one-file-system / 2>backup.log | pv -p --timer --rate --bytes > backup/backup_%s.tgz" % (data)
+                    # Se si vuole una minor compressione sostituire il flag -cpzf con -cpf
+                    command = "sudo tar -cpzf - --exclude-from='excludes' /home /etc 2>backup.log | pv -p --timer --rate --bytes > backup/backup_%s.tgz" % (data)
                     subprocess.call(command, shell=True)
                     print()
                     print()
                     input("Backup terminato, premere un tasto per uscire!")
-                    return
                     os.system("clear && clear")
+                    return
         if root2 == "su":
             time.sleep(2)
             print()
@@ -173,8 +210,8 @@ def backup():
                     print()
                     print("Processo avviato...")
                     print()
-                    # Se si vuole una maggior compressione sostituire il flag -cpf con -zcpf
-                    command = "su root -c 'tar --xattrs -cpf - --exclude-from='excludes' --one-file-system / 2>backup.log | pv -p --timer --rate --bytes > backup/backup_%s.tgz'"
+                    # Se si vuole una minor compressione sostituire il flag -cpzf con -cpf
+                    command = "su root -c 'tar -cpzf - --exclude-from='excludes' /home /etc 2>backup.log | pv -p --timer --rate --bytes > backup/backup_%s.tgz'"
                     os.system(command % (data))
                     print()
                     print()
@@ -185,7 +222,7 @@ backup()
 
 
 def remote():
-    if select == 2:
+    if select == 3:
         print()
         print((Fore.RED + "- !ATTENZIONE! - "))
         print((Fore.RED + "Con questo sistema potete inviare il file di backup direttamente su un altro computer o server"))
@@ -225,7 +262,7 @@ def remote():
                 print()
                 print("Processo avviato...")
                 print()
-                command = "sudo tar -cvpz --xattrs backup/backup_%s.tgz --exclude-from='excludes' --one-file-system / 1 2>net_backup.log | pv | nc -q 0 %s %s"
+                command = "sudo tar -cvpz --xattrs backup/backup_%s.tgz --exclude-from='excludes' /home /etc 1 2>net_backup.log | pv | nc -q 0 %s %s"
                 os.system(command % (data, address, port))
                 print()
                 print()
@@ -276,7 +313,7 @@ def remote():
                 print()
                 print("Processo avviato...")
                 print()
-                command = "su root -c 'tar -cvpz --xattrs backup/backup_%s.tgz --exclude-from='excludes' --one-file-system / 1 2>net_backup.log | pv | nc -q 0 %s %s'"
+                command = "su root -c 'tar -cvpz --xattrs backup/backup_%s.tgz --exclude-from='excludes' /home /etc 1 2>net_backup.log | pv | nc -q 0 %s %s'"
                 os.system(command % (data, address, port))
                 print()
                 print()
@@ -287,42 +324,40 @@ remote()
 
 
 def recovery():
-    if select == 3:
+    if select == 4:
         if root1 == "sudo":
             print()
-            print((Fore.MAGENTA + "Montare Unità"))
-            print((Fore.MAGENTA + "-------------"))
             print()
-            print()
-            subprocess.call("lsblk", shell=True)
-            print()
-            partition = input("Quale partizione vuoi ripristinare? (es. sda1) ")
-            fsck = "sudo fsck -y /dev/%s"
-            os.system(fsck % (partition))
-            mount = "sudo mount -t auto /dev/%s /mnt"
-            os.system(mount % (partition))
-            subprocess.call("sudo chown user.user /mnt", shell=True)
-            subprocess.call("mkdir /mnt/backup", shell=True)
-            print()
-            print()
-            input("Trasferire il file di backup nella cartella /mnt/backup e premere il tasto INVIO")
+            input('Trasferire il file backup e file pacchetti nella cartella ' + Fore.RED + 'backup' + Style.RESET_ALL + ' e premere il tasto INVIO')
             print()
             print((Fore.MAGENTA + "Lista Backup"))
             print((Fore.MAGENTA + "------------"))
             print()
+            os.system("cd backup && ls *.tgz")
             print()
-            os.system("cd /mnt/backup && ls *.tgz")
             print()
-            var = input("Digitare un backup presente in lista: ")
+            var_backup = input("Digitare un backup presente in lista: ")
             time.sleep(2)
             print()
             print("Processo avviato...")
             print()
-            command = "sudo tar -xpzf /mnt/backup/%s -C /mnt --numeric-owner --checkpoint=.1000 2>recovery.log"
-            os.system(command % (var))
-            subprocess.call("sudo rm -rf /mnt/backup", shell=True)
-            subprocess.call("cd /", shell=True)
-            subprocess.call("sudo umount /mnt", shell=True)
+            command2 = "sudo pv backup/%s | sudo tar -xpzf - -C / 2> recovery.log"
+            os.system(command2 % (var_backup))
+            print()
+            print()
+            print((Fore.MAGENTA + "Lista file pacchetti"))
+            print((Fore.MAGENTA + "--------------------"))
+            print()
+            os.system("cd backup && ls *.txt")
+            print()
+            var_list = input("Digitare la lista dei pacchetti da installare presente in lista: ")
+            time.sleep(2)
+            os.system("sudo apt update && sudo apt upgrade")
+            print()
+            command = "xargs sudo apt-get install < backup/%s 2>recovery.log"
+            os.system(command % (var_list))
+            time.sleep(2)
+            print()
             print()
             print((Fore.GREEN + "Processo terminato."))
             print((Fore.RESET))
@@ -331,39 +366,37 @@ def recovery():
             return
         if root2 == "su":
             print()
-            print((Fore.MAGENTA + "Montare Unità"))
-            print((Fore.MAGENTA + "-------------"))
             print()
-            print()
-            subprocess.call("lsblk", shell=True)
-            print()
-            partition = input("Quale partizione vuoi ripristinare? (es. sda1) ")
-            fsck = "su root -c 'fsck -y /dev/%s'"
-            os.system(fsck % (partition))
-            mount = "su root -c 'mount -t auto /dev/%s /mnt'"
-            os.system(mount % (partition))
-            subprocess.call("su root -c 'chown user.user /mnt'", shell=True)
-            subprocess.call("mkdir /mnt/backup", shell=True)
-            print()
-            print()
-            input("Trasferire il file di backup nella cartella /mnt/backup e premere il tasto INVIO")
+            input('Trasferire il file backup e file pacchetti nella cartella ' + Fore.RED + 'backup' + Style.RESET_ALL + ' e premere il tasto INVIO')
             print()
             print((Fore.MAGENTA + "Lista Backup"))
             print((Fore.MAGENTA + "------------"))
             print()
             print()
-            os.system("cd /mnt/backup && ls *.tgz")
+            os.system("cd backup && ls *.tgz")
             print()
-            var = input("Digitare un backup presente in lista: ")
+            var_backup = input("Digitare un backup presente in lista: ")
             time.sleep(2)
             print()
             print("Processo avviato...")
             print()
-            command = "su root -c 'tar -xpzf /mnt/backup/%s -C /mnt --numeric-owner --checkpoint=.1000 2>recovery.log'"
-            os.system(command % (var))
-            subprocess.call("su root -c 'rm -rf /mnt/backup'", shell=True)
-            subprocess.call("cd /", shell=True)
-            subprocess.call("su root -c 'umount /mnt'", shell=True)
+            command2 = "su root -c 'pv backup/%s | sudo tar -xpzf - -C / 2> recovery.log'"
+            os.system(command2 % (var_backup))
+            print()
+            print()
+            print((Fore.MAGENTA + "Lista file pacchetti"))
+            print((Fore.MAGENTA + "--------------------"))
+            print()
+            os.system("cd backup && ls *.txt")
+            print()
+            var_list = input("Digitare la lista dei pacchetti da installare presente in lista: ")
+            time.sleep(2)
+            os.system("su root -c 'apt-get update && apt-get upgrade'")
+            print()
+            command = "xargs su root -c 'apt-get install < backup/%s 2>recovery.log'"
+            os.system(command % (var_list))
+            time.sleep(2)
+            print()
             print()
             print((Fore.GREEN + "Processo terminato."))
             print((Fore.RESET))
@@ -374,7 +407,7 @@ recovery()
 
 def manager():
     os.system("clear && clear")
-    if select == 4:
+    if select == 5:
         print()
         print((Fore.GREEN + "   ______    ____     ____  __   ___  ____   __    __   _____ ______ __      __ "))
         print((Fore.GREEN + "  (_   _ \  (    )   / ___)() ) / __)/ __ \  ) )  ( (  / ___/(   __ \) \    / ( "))
@@ -385,7 +418,7 @@ def manager():
         print((Fore.GREEN + "  (______//__(  )__\ \____)()_)  \_\ \____/     \/      \____\)_) \__/  /__\    "))
         print()
         print((Fore.RED + "                                  Coded by Alexis                                 "))
-        print((Fore.RED + "                                http://alexis82.it/                               "))
+        print((Fore.RED + "                                https://alexis82.it/                              "))
         print()
         print()
         print()
@@ -400,15 +433,15 @@ def manager():
             if select2 >= 3:
                 print("Opzione non trovata")
                 input("Premere un tasto per continuare")
-                os.system("python backovery.py")
+                os.system("python3 backovery.py")
         except NameError:
             print("Comando non valido")
             input("Premere un tasto per continuare")
-            os.system("python backovery.py")
+            os.system("python3 backovery.py")
         except SyntaxError:
             print("Comando non valido")
             input("Premere un tasto per continuare")
-            os.system("python backovery.py")
+            os.system("python3 backovery.py")
         except UnboundLocalError:
             print("Sistema terminato")
         if select2 == 1:
@@ -459,7 +492,7 @@ def manager():
             else:
                 print("Opzione non trovata!")
                 input("Premere un tasto per continuare")
-                os.system("python backovery.py")
+                os.system("python3 backovery.py")
         if select2 == 2:
             print()
             print()
@@ -478,9 +511,9 @@ def manager():
             print()
             print("Completato")
             print()
-            os.system("python ../../backovery.py")
+            os.system("python3 ../../backovery.py")
         if select2 == 0:
-            os.system("python backovery.py")
+            os.system("python3 backovery.py")
 manager()
 
 def close():

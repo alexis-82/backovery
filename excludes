@@ -7,3 +7,6 @@ backup/*
 /media
 /var/log
 /opt
+/dev
+/tmp
+/run
