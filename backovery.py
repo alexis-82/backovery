@@ -37,7 +37,7 @@ print((Fore.GREEN + "   _) (_) )/  /\  \ \ \___ ( (  \ \ \ \__/ /   \  /    \ \_
 print((Fore.GREEN + "  (______//__(  )__\ \____)()_)  \_\ \____/     \/      \____\)_) \__/  /__\    "))
 print()
 print((Fore.RED + "                                  Coded by Alexis                                 "))
-print((Fore.RED + "                                http://alexis82.it/                               "))
+print((Fore.RED + "                                https://alexis82.it/                              "))
 print()
 print()
 

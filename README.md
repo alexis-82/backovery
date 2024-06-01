@@ -7,22 +7,26 @@ Required Python3.x with pip
 ### <span style="color:red">BACKUP</span>
 
 
-* **Step 1**	
+* **Step 1**
+Download Backovery
+
+```
+git clone https://github.com/alexis-82/backovery.git
+```	
+
+* **Step 2**	
 Install package pv and colorama
 
 ```
 pip install -r requirements.txt 
 ```
-
-* **Step 2**	
-Download Backovery
-
+and
 ```
-git clone https://github.com/alexis-82/backovery.git
+apt install pv
 ```
 
 * **Step 3**	
-Exclude folders in file exclude ex. syntax =--exclude=/proc
+Exclude folders in file exclude ex. syntax = /proc
 
 ```
 vim excludes
