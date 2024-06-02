@@ -161,7 +161,7 @@ def backup():
                     print("Processo avviato...")
                     print()
                     # Se si vuole una minor compressione sostituire il flag -cpzf con -cpf
-                    command = "sudo tar -cpzf - --exclude-from='excludes' /home /etc 2>backup.log | pv -p --timer --rate --bytes > backup/backup_%s.tgz" % (data)
+                    command = "sudo tar --xattrs -cpzf - --exclude-from='excludes' --one-file-system / 2>backup.log | pv -p --timer --rate --bytes > backup/backup_%s.tgz" % (data)
                     subprocess.call(command, shell=True)
                     print()
                     print()
@@ -211,7 +211,7 @@ def backup():
                     print("Processo avviato...")
                     print()
                     # Se si vuole una minor compressione sostituire il flag -cpzf con -cpf
-                    command = "su root -c 'tar -cpzf - --exclude-from='excludes' /home /etc 2>backup.log | pv -p --timer --rate --bytes > backup/backup_%s.tgz'"
+                    command = "su root -c 'tar --xattrs -cpzf - --exclude-from='excludes' --one-file-system / 2>backup.log | pv -p --timer --rate --bytes > backup/backup_%s.tgz'"
                     os.system(command % (data))
                     print()
                     print()
@@ -352,12 +352,16 @@ def recovery():
             print()
             var_list = input("Digitare la lista dei pacchetti da installare presente in lista: ")
             time.sleep(2)
-            os.system("sudo apt update && sudo apt upgrade")
+            os.system("sudo apt update && sudo apt upgrade -y")
             print()
-            command = "xargs sudo apt-get install < backup/%s 2>recovery.log"
+            # qui andrebbe il nuovo codice per confrontare i due file packages
+            print()
+            command = "xargs sudo apt-get install --reinstall -y < backup/%s 2>recovery.log"
             os.system(command % (var_list))
             time.sleep(2)
             print()
+            # command2 = "sudo pv backup/%s | sudo tar -xpzf - -C / 2> recovery.log"
+            # os.system(command2 % (var_backup))
             print()
             print((Fore.GREEN + "Processo terminato."))
             print((Fore.RESET))
@@ -391,10 +395,12 @@ def recovery():
             print()
             var_list = input("Digitare la lista dei pacchetti da installare presente in lista: ")
             time.sleep(2)
-            os.system("su root -c 'apt-get update && apt-get upgrade'")
+            os.system("su root -c 'apt-get update && apt-get upgrade -y'")
             print()
-            command = "xargs su root -c 'apt-get install < backup/%s 2>recovery.log'"
-            os.system(command % (var_list))
+            # qui andrebbe il nuovo codice per confrontare i due file packages
+            print()
+            command = "su -c 'xargs -I {} sh -c \"apt-get install --reinstall -y {} < backup/%s 2> recovery.log\" < backup/%s'"
+            os.system(command % (var_list, var_list))
             time.sleep(2)
             print()
             print()

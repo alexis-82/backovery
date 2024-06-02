@@ -10,3 +10,6 @@ backup/*
 /dev
 /tmp
 /run
+/etc/fstab
+/cdrom
+/boot
