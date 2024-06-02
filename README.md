@@ -63,10 +63,10 @@ sudo apt-get update
 ```
 pip install -r requirements.txt 
 ```
-* **Step 3**	
+* **Step 3**  
 Put the backup file in the backup/ 
 
-<br />
+
 
 * **Step 4**	
 Run file backovery.py
