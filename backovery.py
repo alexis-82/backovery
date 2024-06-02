@@ -360,8 +360,6 @@ def recovery():
             os.system(command % (var_list))
             time.sleep(2)
             print()
-            # command2 = "sudo pv backup/%s | sudo tar -xpzf - -C / 2> recovery.log"
-            # os.system(command2 % (var_backup))
             print()
             print((Fore.GREEN + "Processo terminato."))
             print((Fore.RESET))
