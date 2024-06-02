@@ -36,7 +36,7 @@ vim excludes
 Run file backovery.py
 
 ```
-python backovery.py
+python3 backovery.py
 ```
 
 * **Step 5**	
@@ -47,7 +47,7 @@ cd backup/
 ```	
 
 
-### <span style="color:red">RECOVERY IN LIVE</span>
+### <span style="color:red">RECOVERY</span>
 * **Step 1**	
 Install package pv
 
@@ -67,5 +67,17 @@ git clone https://github.com/alexis-82/backovery.git
 Run file backovery.py
 
 ```
-python backovery.py
+python3 backovery.py
 ```
+# Todo List
+
+## Things to do
+- [ ] Export and Import file config desktop
+- [ ] Empty trash
+- [ ] Fix function remote
+- [ ] Install libraries from script
+- [ ] Check code with 'su' system
+- [ ] Update all systems
+
+## Fix bugs
+- [ ] 
