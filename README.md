@@ -26,7 +26,7 @@ apt install pv
 ```
 
 * **Step 3**	
-Exclude folders in file exclude ex. syntax = /proc
+Exclude folders in file exclude ex. syntax = /proc <span style="color:red">(already configures)</span>
 
 ```
 vim excludes
@@ -49,6 +49,12 @@ cd backup/
 
 ### <span style="color:red">RECOVERY</span>
 * **Step 1**	
+Download Backovery
+
+```
+git clone https://github.com/alexis-82/backovery.git
+```
+* **Step 2**	
 Install package pv
 
 ```
@@ -57,13 +63,10 @@ sudo apt-get update
 ```
 pip install -r requirements.txt 
 ```
-* **Step 2**	
-Download Backovery
-
-```
-git clone https://github.com/alexis-82/backovery.git
-```
-* **Step 2**	
+* **Step 3**	
+Put the backup file in the backup/ folder
+&nbsp;
+* **Step 4**	
 Run file backovery.py
 
 ```
