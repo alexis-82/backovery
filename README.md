@@ -65,7 +65,7 @@ pip install -r requirements.txt
 ```
 * **Step 3**	
 Put the backup file in the backup/ folder
-&nbsp;
+<br />
 * **Step 4**	
 Run file backovery.py
 
