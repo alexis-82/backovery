@@ -290,7 +290,7 @@ def remote():
                 print()
                 print("Processo avviato...")
                 print()
-                command = "sudo tar -cvpz --xattrs backup/backup_%s.tgz --exclude-from='excludes' /home /etc 1 2>net_backup.log | pv | nc -q 0 %s %s"
+                command = "sudo tar -cvpz --xattrs Backup/backup_%s.tgz --exclude-from='excludes' 1 2>net_backup.log | pv | nc -q 0 %s %s"
                 os.system(command % (data, address, port))
                 print()
                 print()
@@ -341,7 +341,7 @@ def remote():
                 print()
                 print("Processo avviato...")
                 print()
-                command = "su root -c 'tar -cvpz --xattrs backup/backup_%s.tgz --exclude-from='excludes' /home /etc 1 2>net_backup.log | pv | nc -q 0 %s %s'"
+                command = "su root -c 'tar -cvpz --xattrs Backup/backup_%s.tgz --exclude-from='excludes' 1 2>net_backup.log | pv | nc -q 0 %s %s'"
                 os.system(command % (data, address, port))
                 print()
                 print()
