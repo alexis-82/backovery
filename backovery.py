@@ -252,7 +252,7 @@ backup()
 def remote():
     if select == 3:
         print()
-        print((Fore.RED + "- !ATTENZIONE! - "))
+        print((Fore.RED + "                                    - !ATTENZIONE! -                                   "))
         print((Fore.RED + "Con questo sistema potete inviare il file di backup direttamente su un altro computer o server"))
         print((Fore.RED + "senza salvare alcun dato sul sistema locale!"))
         print((Fore.RED + "Scompattare il file remote.tar nel server e avviatelo"))
@@ -264,7 +264,8 @@ def remote():
             print()
             print()
             time.sleep(1)
-            kernel = eval(input("Vuoi rimuovere delle vecchie versioni di kernel per ottimizzare il backup? [si/no] "))
+            os.system("rm id")
+            kernel = input("Vuoi rimuovere delle vecchie versioni di kernel per ottimizzare il backup? [si/no] ")
             if kernel == 'si' or kernel == 's':
                 print()
                 print((Fore.RED + "Kernel attualmente utilizzato:"))
@@ -276,7 +277,7 @@ def remote():
                 print()
                 print()
                 print((Fore.RED + "ATTENZIONE - NON DISINSTALLARE IL KERNEL ATTUALMENTE IN USO"))
-                uninstall = eval(input("Specificare il kernel da rimuovere: "))
+                uninstall = input("Specificare il kernel da rimuovere: ")
                 command = "sudo apt-get purge %s"
                 os.system(command % (uninstall))
                 print()
@@ -284,17 +285,19 @@ def remote():
                 print()
                 os.system("sudo apt-get autoremove && sudo apt-get clean && sudo apt-get autoclean")
             if kernel == 'no' or kernel == 'n':
-                address = eval(input("Digitare l'indirizzo IP di destinazione: "))
-                port = eval(input("Digitare la porta: "))
+                print()
+                address = input("Digitare l'indirizzo IP di destinazione: ")
+                port = input("Digitare la porta: ")
                 print()
                 print()
                 print("Processo avviato...")
                 print()
-                command = "sudo tar -cvpz --xattrs Backup/backup_%s.tgz --exclude-from='excludes' 1 2>net_backup.log | pv | nc -q 0 %s %s"
+                time.sleep(1)
+                command = "sudo tar -cpz --xattrs Backup/backup_%s.tgz --exclude-from='excludes' --one-file-system / 1 2>net_backup.log | pv | nc -q 0 %s %s"
                 os.system(command % (data, address, port))
                 print()
                 print()
-                eval(input("Backup remoto terminato, premere un tasto per uscire!"))
+                input("Backup remoto terminato, premere un tasto per uscire!")
                 os.system("clear && clear")
                 return
         if root2 == "su":
@@ -305,6 +308,7 @@ def remote():
             print()            
             print()
             time.sleep(1)
+            os.system("rm id")
             print("PULIZIA DEL SISTEMA")
             print()
             os.system("su root -c 'apt-get autoremove' && su root -c 'apt-get clean' && su root -c 'apt-get autoclean'")
@@ -315,7 +319,7 @@ def remote():
             print()
             print()
             time.sleep(1)
-            kernel = eval(input("Vuoi rimuovere delle vecchie versioni di kernel per ottimizzare il backup? [si/no] "))
+            kernel = input("Vuoi rimuovere delle vecchie versioni di kernel per ottimizzare il backup? [si/no] ")
             if kernel == 'si' or kernel == 's':
                 print()
                 print((Fore.RED + "Kernel attualmente utilizzato:"))
@@ -327,7 +331,7 @@ def remote():
                 print()
                 print()
                 print((Fore.RED + "ATTENZIONE - NON DISINSTALLARE IL KERNEL ATTUALMENTE IN USO"))
-                uninstall = eval(input("Specificare il kernel da rimuovere: "))
+                uninstall = input("Specificare il kernel da rimuovere: ")
                 command = "su root -c 'apt-get purge %s'"
                 os.system(command % (uninstall))
                 print()
@@ -335,13 +339,14 @@ def remote():
                 print()
                 os.system("su root -c 'apt-get autoremove' && su root -c 'apt-get clean' && su root -c 'apt-get autoclean'")
             if kernel == 'no' or kernel == 'n':
-                address = eval(input("Digitare l'indirizzo IP di destinazione: "))
-                port = eval(input("Digitare la porta: "))
+                print()
+                address = input("Digitare l'indirizzo IP di destinazione: ")
+                port = input("Digitare la porta: ")
                 print()
                 print()
                 print("Processo avviato...")
                 print()
-                command = "su root -c 'tar -cvpz --xattrs Backup/backup_%s.tgz --exclude-from='excludes' 1 2>net_backup.log | pv | nc -q 0 %s %s'"
+                command = "su root -c 'tar -cpz --xattrs Backup/backup_%s.tgz --exclude-from='excludes' --one-file-system / 1 2>net_backup.log' | pv | nc -q 0 %s %s"
                 os.system(command % (data, address, port))
                 print()
                 print()
