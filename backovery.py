@@ -465,6 +465,7 @@ def manager():
         print()
         print("[0] Indietro")
         print()
+        
         try:
             select2 = eval(input("Scegliere un opzione: "))
             if select2 >= 3:
@@ -481,6 +482,7 @@ def manager():
             os.system("python3 backovery.py")
         except UnboundLocalError:
             print("Sistema terminato")
+        
         if select2 == 1:
             print()
             print()
