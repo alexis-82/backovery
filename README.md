@@ -62,13 +62,14 @@ git clone https://github.com/alexis-82/backovery.git
 ```
 * **Step 2**	
 
-Install package pv
+Install package pv and colorama
 
 ```
-sudo apt-get update
-```
-```
 pip install -r requirements.txt 
+```
+and
+```
+apt install pv
 ```
 * **Step 3**
 
