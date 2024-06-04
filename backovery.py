@@ -1,28 +1,31 @@
 #!/usr/bin/env pthon3
 # -*- coding: utf-8 -*-
 
-import os, sys, subprocess, time
+import os
+import sys
+import subprocess
+import time
 from lib import Fore, Back, Style, init
 
 sys.stdout.write("\x1b[8;{rows};{cols}t".format(rows=40, cols=90))
 
 subprocess.call("clear && clear", shell=True)
 
-#nodir = open("excludes","r")
-#exc = nodir.read()
-#nodir.close()
+# nodir = open("excludes","r")
+# exc = nodir.read()
+# nodir.close()
 
 init(autoreset=True)
 
 data = (time.strftime("%d_%m_%Y"))
 directory = "$(pwd)"
 
-id1 = os.system ("grep -wom1 'sudo' $HOME/.bash_history > id")
+id1 = os.system("grep -wom1 'sudo' $HOME/.bash_history > id")
 file = open("id", "r")
 root1 = file.read(4 - 0)
 
 if os.stat("id").st_size == 0:
-    id2 = os.system ("grep -wom1 'su' $HOME/.bash_history > id")
+    id2 = os.system("grep -wom1 'su' $HOME/.bash_history > id")
     file = open("id", "r")
     root2 = file.read(4 - 0)
 
@@ -92,7 +95,8 @@ def esporta():
             print()
             os.system("rm id")
             time.sleep(1)
-            os.system("sudo apt-mark showmanual | grep -vE 'linux-(generic|headers|image|modules)' > backup/packages_%s.txt" % (data))
+            os.system("mkdir Backup/backup_%s.txt 2>backup.log" % (data))
+            os.system("sudo apt-mark showmanual | grep -vE 'linux-(generic|headers|image|modules)' > Backup/packages_%s.txt" % (data))
             input("File generato, premere un tasto per tornare indietro!")
             os.system("clear && clear")
             os.system("python3 backovery.py")
@@ -105,12 +109,24 @@ def esporta():
             print()
             os.system("rm id")
             time.sleep(1)
-            os.system("su root -c 'aapt-mark showmanual | grep -vE 'linux-(generic|headers|image|modules)' > backup/packages_%s.txt'") % (data)
+            os.system("su root -c 'aapt-mark showmanual | grep -vE 'linux-(generic|headers|image|modules)' > Backup/packages_%s.txt'") % (data)
             input("File generato, premere un tasto per tornare indietro!")
             os.system("clear && clear")
             os.system("python3 backovery.py")
             return
+
+
 esporta()
+
+def stampa_avanzamento(passi):
+    contatore = 0
+    while contatore < passi:
+        print(f"\r[{'#' * contatore}{'.' * (passi - contatore)}] {contatore}/{passi}", end="", flush=True)
+        contatore += 1
+        time.sleep(0.3)
+    print("\r[" + "#" * passi + "] Operazione completata!")
+
+
 
 def backup():
     if select == 2:
@@ -128,9 +144,15 @@ def backup():
             time.sleep(1)
             print("PULIZIA DEL SISTEMA")
             print()
-            os.system("sudo apt-get autoremove && sudo apt-get clean && sudo apt-get autoclean")
+            os.system("sudo apt-get autoremove 1>backup.log && sudo apt-get clean 1>backup.log && sudo apt-get autoclean 1>backup.log")
             os.system("sudo rm -rf /tmp/*")
+            os.system("rm -rf ~/.local/share/Trash/files/*")
             print()
+            # Stampa della barra di avanzamento per la pulizia del sistema
+            passi = 10
+            stampa_avanzamento(passi)
+            print()
+            time.sleep(1)
             while select:
                 # Riconoscimento sistema
                 print()
@@ -154,14 +176,14 @@ def backup():
                     print()
                     print("PULIZIA DEL SISTEMA")
                     print()
-                    os.system("sudo apt-get autoremove && sudo apt-get clean && sudo apt-get autoclean")
+                    os.system("sudo apt-get autoremove 1>backup.log && sudo apt-get clean 1>backup.log && sudo apt-get autoclean 1>backup.log")
                 if kernel == 'no' or kernel == 'n':
                     print()
                     print()
                     print("Processo avviato...")
                     print()
                     # Se si vuole una minor compressione sostituire il flag -cpzf con -cpf
-                    command = "sudo tar --xattrs -cpzf - --exclude-from='excludes' --one-file-system / 2>backup.log | pv -p --timer --rate --bytes > backup/backup_%s.tgz" % (data)
+                    command = "sudo tar --xattrs -cpzf - --exclude-from='excludes' --one-file-system / 2>backup.log | pv -p --timer --rate --bytes > Backup/backup_%s.tgz" % (data)
                     subprocess.call(command, shell=True)
                     print()
                     print()
@@ -178,9 +200,15 @@ def backup():
             time.sleep(1)
             print("PULIZIA DEL SISTEMA")
             print()
-            os.system("su root -c 'apt-get autoremove' && su root -c 'apt-get clean' && su root -c 'apt-get autoclean'")
+            os.system("su root -c 'apt-get autoremove 1>backup.log' && su root -c 'apt-get clean 1>backup.log' && su root -c 'apt-get autoclean 1>backup.log'")
             os.system("su root -c 'rm -rf /tmp/*'")
+            os.system("rm -rf ~/.local/share/Trash/files/*")
             print()
+            # Stampa della barra di avanzamento per la pulizia del sistema
+            passi = 10
+            stampa_avanzamento(passi)
+            print()
+            time.sleep(1)
             while select:
                 # Riconoscimento sistema
                 print()
@@ -204,14 +232,14 @@ def backup():
                     print()
                     print("PULIZIA DEL SISTEMA")
                     print()
-                    os.system("su root -c 'apt-get autoremove' && su root -c 'apt-get clean' && su root -c 'apt-get autoclean'")
+                    os.system("su root -c 'apt-get autoremove 1>backup.log' && su root -c 'apt-get clean 1>backup.log' && su root -c 'apt-get autoclean 1>backup.log'")
                 if kernel == 'no' or kernel == 'n':
                     print()
                     print()
                     print("Processo avviato...")
                     print()
                     # Se si vuole una minor compressione sostituire il flag -cpzf con -cpf
-                    command = "su root -c 'tar --xattrs -cpzf - --exclude-from='excludes' --one-file-system / 2>backup.log | pv -p --timer --rate --bytes > backup/backup_%s.tgz'"
+                    command = "su root -c 'tar --xattrs -cpzf - --exclude-from='excludes' --one-file-system / 2>backup.log | pv -p --timer --rate --bytes > Backup/backup_%s.tgz'"
                     os.system(command % (data))
                     print()
                     print()
@@ -328,12 +356,12 @@ def recovery():
         if root1 == "sudo":
             print()
             print()
-            input('Trasferire il file backup e file pacchetti nella cartella ' + Fore.RED + 'backup' + Style.RESET_ALL + ' e premere il tasto INVIO')
+            input('Trasferire il file backup e file pacchetti nella cartella ' + Fore.RED + 'Backup' + Style.RESET_ALL + ' e premere il tasto INVIO')
             print()
             print((Fore.MAGENTA + "Lista Backup"))
             print((Fore.MAGENTA + "------------"))
             print()
-            os.system("cd backup && ls *.tgz")
+            os.system("cd Backup && ls *.tgz")
             print()
             print()
             var_backup = input("Digitare un backup presente in lista: ")
@@ -341,14 +369,14 @@ def recovery():
             print()
             print("Processo avviato...")
             print()
-            command2 = "sudo pv backup/%s | sudo tar -xpzf - -C / 2> recovery.log"
+            command2 = "sudo pv Backup/%s | sudo tar -xpzf - -C / 2> recovery.log"
             os.system(command2 % (var_backup))
             print()
             print()
             print((Fore.MAGENTA + "Lista file pacchetti"))
             print((Fore.MAGENTA + "--------------------"))
             print()
-            os.system("cd backup && ls *.txt")
+            os.system("cd Backup && ls *.txt")
             print()
             var_list = input("Digitare la lista dei pacchetti da installare presente in lista: ")
             time.sleep(2)
@@ -356,7 +384,7 @@ def recovery():
             print()
             # qui andrebbe il nuovo codice per confrontare i due file packages
             print()
-            command = "xargs sudo apt-get install --reinstall -y < backup/%s 2>recovery.log"
+            command = "xargs sudo apt-get install --reinstall -y < Backup/%s 2>recovery.log"
             os.system(command % (var_list))
             time.sleep(2)
             print()
