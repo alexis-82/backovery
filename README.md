@@ -84,7 +84,7 @@ python3 backovery.py
 
 ## Things to do
 - [ ] Export and Import file config desktop
-- [ ] Empty trash
+- [x] Empty trash
 - [ ] Fix function remote
 - [ ] Install libraries from script
 - [ ] Check code with 'su' system
