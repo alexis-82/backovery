@@ -84,9 +84,9 @@ python3 backovery.py
 # Todo List
 
 ## Things to do
-- [ ] Export and Import file config desktop
+- [x] Export and Import file config desktop
 - [x] Empty trash
-- [ ] Fix function remote
+- [x] Fix function remote
 - [ ] Install libraries from script
 - [ ] Check code with 'su' system
 - [ ] Update all systems
