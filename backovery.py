@@ -279,11 +279,13 @@ def recovery():
         else:
             print("Scelta non valida. Utilizzo cartella predefinita.")
             destinazione = "Backup"
-        input('Trasferire il file backup e file pacchetti nella cartella'+ Fore.RED + destinazione + Style.RESET_ALL +'e premere il tasto INVIO')
+        print()
+        input('Trasferire il file backup e file pacchetti nella cartella '+ Fore.RED + destinazione + Style.RESET_ALL +' e premere il tasto INVIO')
         print()
         os.system("apt-mark showmanual > tmp/new_packages.txt")
         os.system("sort tmp/new_packages.txt -o tmp/newsystem_packages.txt")
-        os.system("mv tmp/newsystem_packages.txt %s/" % destinazione)
+        os.system("mv tmp/newsystem_packages.txt %s/" % (destinazione))
+        os.system("rm tmp/new_packages.txt")
         print()
         print((Fore.MAGENTA + "Lista Backup"))
         print((Fore.MAGENTA + "------------"))
@@ -298,10 +300,6 @@ def recovery():
         print()
         command2 = "pv %s/%s | tar -xpzf - -C / 2> recovery.log" % (destinazione, var_backup)
         os.system(command2)
-        print()
-        print()
-        print((Fore.MAGENTA + "Lista file pacchetti da ripristinare"))
-        print((Fore.MAGENTA + "------------------------------------"))
         print()
         # qui andrebbe il nuovo codice per confrontare i due file packages
         os.system("comm -23 %s/all_packages_%s.txt %s/newsystem_packages.txt > %s/packages_%s.txt" % (destinazione, data, destinazione, destinazione, data))
@@ -321,6 +319,9 @@ def recovery():
         else:
             print("Scelta non valida. Utilizzo cartella predefinita.")
             destinazione_pacchetti = "Backup"
+        print()
+        print((Fore.MAGENTA + "Lista file pacchetti da ripristinare"))
+        print((Fore.MAGENTA + "------------------------------------"))
         os.system("cd %s && ls *.txt" % destinazione)
         print()
         var_list = input("Digitare la lista dei pacchetti da installare presente in lista: ")
