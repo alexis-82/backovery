@@ -301,6 +301,10 @@ def recovery():
         command2 = "pv %s/%s | tar -xpzf - -C / 2> recovery.log" % (destinazione, var_backup)
         os.system(command2)
         print()
+        print()
+        print((Fore.MAGENTA + "Lista file pacchetti da ripristinare"))
+        print((Fore.MAGENTA + "------------------------------------"))
+        print()
         # qui andrebbe il nuovo codice per confrontare i due file packages
         os.system("comm -23 %s/all_packages_%s.txt %s/newsystem_packages.txt > %s/packages_%s.txt" % (destinazione, data, destinazione, destinazione, data))
         os.system("rm %s/all_packages_%s.txt && rm %s/newsystem_packages.txt && rm tmp/*" % (destinazione, data, destinazione))
@@ -319,9 +323,6 @@ def recovery():
         else:
             print("Scelta non valida. Utilizzo cartella predefinita.")
             destinazione_pacchetti = "Backup"
-        print()
-        print((Fore.MAGENTA + "Lista file pacchetti da ripristinare"))
-        print((Fore.MAGENTA + "------------------------------------"))
         os.system("cd %s && ls *.txt" % destinazione)
         print()
         var_list = input("Digitare la lista dei pacchetti da installare presente in lista: ")
