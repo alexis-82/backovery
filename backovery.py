@@ -265,8 +265,10 @@ def recovery():
     if select == 4:
         time.sleep(2)
         print()
+        print((Fore.MAGENTA + "Lista Backup"))
+        print((Fore.MAGENTA + "------------"))
         # Scelta della destinazione dei file di backup e pacchetti
-        print("Scegli la destinazione dei file di backup e pacchetti:")
+        print("Scegli la cartella dei file di backup:")
         print()
         print("1. Cartella predefinita (Backup)")
         print("2. Altra cartella")
@@ -275,7 +277,7 @@ def recovery():
         if scelta == "1":
             destinazione = "Backup"
         elif scelta == "2":
-            destinazione = input("Inserisci il percorso della cartella di destinazione: ")
+            destinazione = input("Inserisci il percorso della cartella: ")
         else:
             print("Scelta non valida. Utilizzo cartella predefinita.")
             destinazione = "Backup"
@@ -284,11 +286,9 @@ def recovery():
         print()
         os.system("apt-mark showmanual > tmp/new_packages.txt")
         os.system("sort tmp/new_packages.txt -o tmp/newsystem_packages.txt")
-        os.system("mv tmp/newsystem_packages.txt %s/" % (destinazione))
-        os.system("rm tmp/new_packages.txt")
+        os.system("mv tmp/newsystem_packages.txt %s/" % destinazione)
+        #os.system("rm tmp/new_packages.txt")
         print()
-        print((Fore.MAGENTA + "Lista Backup"))
-        print((Fore.MAGENTA + "------------"))
         print()
         os.system("cd %s && ls *.tgz" % destinazione)
         print()
@@ -301,12 +301,10 @@ def recovery():
         command2 = "pv %s/%s | tar -xpzf - -C / 2> recovery.log" % (destinazione, var_backup)
         os.system(command2)
         print()
-        # qui andrebbe il nuovo codice per confrontare i due file packages
-        os.system("comm -23 %s/all_packages_%s.txt %s/newsystem_packages.txt > %s/packages_%s.txt" % (destinazione, data, destinazione, destinazione, data))
-        os.system("rm %s/all_packages_%s.txt && rm %s/newsystem_packages.txt && rm tmp/*" % (destinazione, data, destinazione))
-        # -------------------------------------------------------------------------- #
+        print((Fore.MAGENTA + "Lista file pacchetti da ripristinare"))
+        print((Fore.MAGENTA + "------------------------------------"))
         # Scelta della destinazione del file di pacchetti
-        print("Scegli la destinazione del file di pacchetti:")
+        print("Scegli la cartella del file di pacchetti:")
         print()
         print("1. Cartella predefinita (Backup)")
         print("2. Altra cartella")
@@ -315,16 +313,18 @@ def recovery():
         if scelta_pacchetti == "1":
             destinazione_pacchetti = "Backup"
         elif scelta_pacchetti == "2":
-            destinazione_pacchetti = input("Inserisci il percorso della cartella di destinazione: ")
+            destinazione_pacchetti = input("Inserisci il percorso della cartella: ")
         else:
             print("Scelta non valida. Utilizzo cartella predefinita.")
             destinazione_pacchetti = "Backup"
         print()
-        print((Fore.MAGENTA + "Lista file pacchetti da ripristinare"))
-        print((Fore.MAGENTA + "------------------------------------"))
         os.system("cd %s && ls *.txt" % destinazione)
         print()
-        var_list = input("Digitare la lista dei pacchetti da installare presente in lista: ")
+        var_list = input("Digitare la lista dei pacchetti da installare: ")
+        # qui andrebbe il nuovo codice per confrontare i due file packages
+        os.system("comm -23 %s/%s %s/newsystem_packages.txt > %s/packages_%s.txt" % (destinazione, var_list, destinazione, destinazione, data))
+        os.system("rm %s/all_packages_%s.txt && rm %s/newsystem_packages.txt && rm tmp/*" % (destinazione, data, destinazione))
+        # -------------------------------------------------------------------------- #
         print()
         time.sleep(2)
         os.system("apt update && apt upgrade -y")
@@ -335,8 +335,10 @@ def recovery():
         time.sleep(2)
         print()
         print()
+        print((Fore.MAGENTA + "Lista file di configurazione"))
+        print((Fore.MAGENTA + "----------------------------"))
         # Scelta della destinazione del file di configurazione
-        print("Scegli la destinazione del file di configurazione:")
+        print("Scegli la cartella del file di configurazione:")
         print()
         print("1. Cartella predefinita (Backup)")
         print("2. Altra cartella")
@@ -345,12 +347,10 @@ def recovery():
         if scelta_config == "1":
             destinazione_config = "Backup"
         elif scelta_config == "2":
-            destinazione_config = input("Inserisci il percorso della cartella di destinazione: ")
+            destinazione_config = input("Inserisci il percorso della cartella: ")
         else:
             print("Scelta non valida. Utilizzo cartella predefinita.")
             destinazione_config = "Backup"
-        print((Fore.MAGENTA + "Lista file di configurazione"))
-        print((Fore.MAGENTA + "----------------------------"))
         print()
         os.system("cd %s && ls *.conf" % destinazione_config)
         print()
