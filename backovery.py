@@ -84,8 +84,10 @@ def esporta():
         time.sleep(2)
         # Scelta della destinazione del file di esportazione
         print("Scegli la destinazione del file di esportazione:")
+        print()
         print("1. Cartella predefinita (Backup)")
         print("2. Altra cartella")
+        print()
         scelta = input("Inserisci il numero della scelta: ")
         if scelta == "1":
             destinazione = "Backup"
