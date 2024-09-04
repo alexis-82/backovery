@@ -267,6 +267,7 @@ def recovery():
         print()
         print((Fore.MAGENTA + "Lista Backup"))
         print((Fore.MAGENTA + "------------"))
+        print()
         # Scelta della destinazione dei file di backup e pacchetti
         print("Scegli la cartella dei file di backup:")
         print()
@@ -287,7 +288,7 @@ def recovery():
         os.system("apt-mark showmanual > tmp/new_packages.txt")
         os.system("sort tmp/new_packages.txt -o tmp/newsystem_packages.txt")
         os.system("mv tmp/newsystem_packages.txt %s/" % destinazione)
-        #os.system("rm tmp/new_packages.txt")
+        os.system("rm tmp/new_packages.txt")
         print()
         print()
         os.system("cd %s && ls *.tgz" % destinazione)
@@ -303,6 +304,7 @@ def recovery():
         print()
         print((Fore.MAGENTA + "Lista file pacchetti da ripristinare"))
         print((Fore.MAGENTA + "------------------------------------"))
+        print()
         # Scelta della destinazione del file di pacchetti
         print("Scegli la cartella del file di pacchetti:")
         print()
@@ -318,12 +320,12 @@ def recovery():
             print("Scelta non valida. Utilizzo cartella predefinita.")
             destinazione_pacchetti = "Backup"
         print()
-        os.system("cd %s && ls *.txt" % destinazione)
+        os.system("cd %s && ls all*.txt" % destinazione)
         print()
         var_list = input("Digitare la lista dei pacchetti da installare: ")
         # qui andrebbe il nuovo codice per confrontare i due file packages
         os.system("comm -23 %s/%s %s/newsystem_packages.txt > %s/packages_%s.txt" % (destinazione, var_list, destinazione, destinazione, data))
-        os.system("rm %s/all_packages_%s.txt && rm %s/newsystem_packages.txt && rm tmp/*" % (destinazione, data, destinazione))
+        os.system("rm %s/%s.txt && rm %s/newsystem_packages.txt && rm tmp/*" % (destinazione, var_list, destinazione))
         # -------------------------------------------------------------------------- #
         print()
         time.sleep(2)
@@ -337,6 +339,7 @@ def recovery():
         print()
         print((Fore.MAGENTA + "Lista file di configurazione"))
         print((Fore.MAGENTA + "----------------------------"))
+        print()
         # Scelta della destinazione del file di configurazione
         print("Scegli la cartella del file di configurazione:")
         print()
