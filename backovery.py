@@ -153,11 +153,44 @@ def backup():
                 print("Esportazione del file di configurazione desktop")
                 print()
                 conf = input("Nominare il file di configurazione: (consigliato il nome del DE) ")
-                config_command = "dconf dump / > Backup/%s_%s.conf" % (conf, data)
+                print()
+                time.sleep(1)
+                # Scelta della destinazione del file di configurazione
+                print("Scegli la destinazione del file di configurazione:")
+                print()
+                print("1. Cartella predefinita (Backup)")
+                print("2. Altra cartella")
+                print()
+                scelta = input("Inserisci il numero della scelta: ")
+                if scelta == "1":
+                    destinazione = "Backup"
+                elif scelta == "2":
+                    destinazione = input("Inserisci il percorso della cartella di destinazione: ")
+                else:
+                    print("Scelta non valida. Utilizzo cartella predefinita.")
+                    destinazione = "Backup"
+                config_command = "dconf dump / > %s/%s_%s.conf" % (destinazione, conf, data)
                 subprocess.call(config_command, shell=True)
                 print()
+                time.sleep(2)
+                # Scelta della destinazione del file di backup
+                print("Scegli la destinazione del file di backup:")
+                print()
+                print("1. Cartella predefinita (Backup)")
+                print("2. Altra cartella")
+                print()
+                scelta = input("Inserisci il numero della scelta: ")
+                if scelta == "1":
+                    destinazione = "Backup"
+                elif scelta == "2":
+                    destinazione = input("Inserisci il percorso della cartella di destinazione: ")
+                else:
+                    print("Scelta non valida. Utilizzo cartella predefinita.")
+                    destinazione = "Backup"
+                print()
+                time.sleep(1)
                 # Se si vuole una minor compressione sostituire il flag -cpzf con -cpf
-                command = "tar --xattrs -cpzf - --exclude-from='excludes' --one-file-system / 2>backup.log | pv -p --timer --rate --bytes > Backup/backup_%s.tgz" % (data)
+                command = "tar --xattrs -cpzf - --exclude-from='excludes' --one-file-system / 2>backup.log | pv -p --timer --rate --bytes > %s/backup_%s.tgz" % (destinazione, data)
                 subprocess.call(command, shell=True)
                 print()
                 print()
