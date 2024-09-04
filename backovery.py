@@ -82,10 +82,21 @@ def esporta():
         print("INIZIO PROCEDURA, NON INTERROMPERE...")
         print()
         time.sleep(2)
-        #os.system("mkdir Backup/backup_%s.txt 2>backup.log" % (data))
-        os.system("apt-mark showmanual | grep -vE 'linux-(generic|headers|image|modules)' > tmp/packages_%s.txt" % (data))
-        os.system("sort tmp/packages_%s.txt -o Backup/all_packages_%s.txt" % (data, data))
-        os.system("rm tmp/packages_%s.txt" % (data))
+        # Scelta della destinazione del file di esportazione
+        print("Scegli la destinazione del file di esportazione:")
+        print("1. Cartella predefinita (Backup)")
+        print("2. Altra cartella")
+        scelta = input("Inserisci il numero della scelta: ")
+        if scelta == "1":
+            destinazione = "Backup"
+        elif scelta == "2":
+            destinazione = input("Inserisci il percorso della cartella di destinazione: ")
+        else:
+            print("Scelta non valida. Utilizzo cartella predefinita.")
+            destinazione = "Backup"
+        os.system("apt-mark showmanual | grep -vE 'linux-(generic|headers|image|modules)' > %s/packages_%s.txt" % (destinazione, data))
+        os.system("sort %s/packages_%s.txt -o %s/all_packages_%s.txt" % (destinazione, data, destinazione, data))
+        os.system("rm %s/packages_%s.txt" % (destinazione, data))
         print()
         time.sleep(1)
         input("File generato, premere un tasto per tornare indietro!")
