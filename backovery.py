@@ -265,16 +265,30 @@ def recovery():
     if select == 4:
         time.sleep(2)
         print()
-        input('Trasferire il file backup e file pacchetti nella cartella ' + Fore.RED + 'Backup' + Style.RESET_ALL + ' e premere il tasto INVIO')
+        # Scelta della destinazione dei file di backup e pacchetti
+        print("Scegli la destinazione dei file di backup e pacchetti:")
+        print()
+        print("1. Cartella predefinita (Backup)")
+        print("2. Altra cartella")
+        print()
+        scelta = input("Inserisci il numero della scelta: ")
+        if scelta == "1":
+            destinazione = "Backup"
+        elif scelta == "2":
+            destinazione = input("Inserisci il percorso della cartella di destinazione: ")
+        else:
+            print("Scelta non valida. Utilizzo cartella predefinita.")
+            destinazione = "Backup"
+        input('Trasferire il file backup e file pacchetti nella cartella'+ Fore.RED + destinazione + Style.RESET_ALL +'e premere il tasto INVIO')
         print()
         os.system("apt-mark showmanual > tmp/new_packages.txt")
         os.system("sort tmp/new_packages.txt -o tmp/newsystem_packages.txt")
-        os.system("mv tmp/newsystem_packages.txt Backup/")
+        os.system("mv tmp/newsystem_packages.txt %s/" % destinazione)
         print()
         print((Fore.MAGENTA + "Lista Backup"))
         print((Fore.MAGENTA + "------------"))
         print()
-        os.system("cd Backup && ls *.tgz")
+        os.system("cd %s && ls *.tgz" % destinazione)
         print()
         print()
         var_backup = input("Digitare un backup presente in lista: ")
@@ -282,18 +296,32 @@ def recovery():
         print()
         print("Processo avviato...")
         print()
-        command2 = "pv Backup/%s | tar -xpzf - -C / 2> recovery.log"
-        os.system(command2 % (var_backup))
+        command2 = "pv %s/%s | tar -xpzf - -C / 2> recovery.log" % (destinazione, var_backup)
+        os.system(command2)
         print()
         print()
         print((Fore.MAGENTA + "Lista file pacchetti da ripristinare"))
         print((Fore.MAGENTA + "------------------------------------"))
         print()
         # qui andrebbe il nuovo codice per confrontare i due file packages
-        os.system("comm -23 Backup/all_packages_%s.txt Backup/newsystem_packages.txt > Backup/packages_%s.txt" % (data, data))
-        os.system("rm Backup/all_packages_%s.txt && rm Backup/newsystem_packages.txt && rm tmp/*" % (data))
+        os.system("comm -23 %s/all_packages_%s.txt %s/newsystem_packages.txt > %s/packages_%s.txt" % (destinazione, data, destinazione, destinazione, data))
+        os.system("rm %s/all_packages_%s.txt && rm %s/newsystem_packages.txt && rm tmp/*" % (destinazione, data, destinazione))
         # -------------------------------------------------------------------------- #
-        os.system("cd Backup && ls *.txt")
+        # Scelta della destinazione del file di pacchetti
+        print("Scegli la destinazione del file di pacchetti:")
+        print()
+        print("1. Cartella predefinita (Backup)")
+        print("2. Altra cartella")
+        print()
+        scelta_pacchetti = input("Inserisci il numero della scelta: ")
+        if scelta_pacchetti == "1":
+            destinazione_pacchetti = "Backup"
+        elif scelta_pacchetti == "2":
+            destinazione_pacchetti = input("Inserisci il percorso della cartella di destinazione: ")
+        else:
+            print("Scelta non valida. Utilizzo cartella predefinita.")
+            destinazione_pacchetti = "Backup"
+        os.system("cd %s && ls *.txt" % destinazione)
         print()
         var_list = input("Digitare la lista dei pacchetti da installare presente in lista: ")
         print()
@@ -301,18 +329,32 @@ def recovery():
         os.system("apt update && apt upgrade -y")
         print()
         print()
-        command = "xargs apt-get install --reinstall -y < Backup/%s 2>recovery.log"
-        os.system(command % (var_list))
+        command = "xargs apt-get install --reinstall -y < %s/%s 2>recovery.log" % (destinazione_pacchetti, var_list)
+        os.system(command)
         time.sleep(2)
         print()
         print()
+        # Scelta della destinazione del file di configurazione
+        print("Scegli la destinazione del file di configurazione:")
+        print()
+        print("1. Cartella predefinita (Backup)")
+        print("2. Altra cartella")
+        print()
+        scelta_config = input("Inserisci il numero della scelta: ")
+        if scelta_config == "1":
+            destinazione_config = "Backup"
+        elif scelta_config == "2":
+            destinazione_config = input("Inserisci il percorso della cartella di destinazione: ")
+        else:
+            print("Scelta non valida. Utilizzo cartella predefinita.")
+            destinazione_config = "Backup"
         print((Fore.MAGENTA + "Lista file di configurazione"))
         print((Fore.MAGENTA + "----------------------------"))
         print()
-        os.system("cd Backup && ls *.conf")
+        os.system("cd %s && ls *.conf" % destinazione_config)
         print()
         conf = input("Digitare il file per la configurazione: ")
-        config_command = "dconf load / < Backup/%s" % (conf)
+        config_command = "dconf load / < %s/%s" % (destinazione_config, conf)
         subprocess.call(config_command, shell=True)
         print()
         time.sleep(2)
