@@ -341,12 +341,12 @@ def recovery():
             print("Scelta non valida. Utilizzo cartella predefinita.")
             destinazione_pacchetti = "Backup"
         print()
-        os.system("cd %s && ls all*.txt" % destinazione)
+        os.system("cd %s && ls all*.txt" % destinazione_pacchetti)
         print()
         var_list = input("Digitare la lista dei pacchetti da installare: ")
         # qui andrebbe il nuovo codice per confrontare i due file packages
-        os.system("comm -23 %s/%s %s/newsystem_packages.txt > %s/packages_%s.txt" % (destinazione, var_list, destinazione, destinazione, data))
-        os.system("rm %s/%s && rm %s/newsystem_packages.txt && rm tmp/*" % (destinazione, var_list, destinazione))
+        os.system("comm -23 %s/%s %s/newsystem_packages.txt > %s/packages_%s.txt" % (destinazione_pacchetti, var_list, destinazione_pacchetti, destinazione_pacchetti, data))
+        os.system("rm %s/%s && rm %s/newsystem_packages.txt && rm tmp/*" % (destinazione_pacchetti, var_list, destinazione_pacchetti))
         # -------------------------------------------------------------------------- #
         print()
         time.sleep(2)
