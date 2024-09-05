@@ -15,6 +15,23 @@ sys.stdout.write("\x1b[8;{rows};{cols}t".format(rows=40, cols=90))
 
 subprocess.call("clear && clear", shell=True)
 
+# Sistema di riconoscimento del path all'interno del file excludes
+# Definisci il percorso del file di esclusione
+exclude_file = 'excludes'
+
+# Ottieni il percorso della cartella corrente
+current_dir = os.getcwd()
+
+# Verifica se il path è già presente nel file di esclusione
+with open(exclude_file, 'r') as f:
+    exclude_paths = f.readlines()
+
+# Verifica se il path è già presente nel file di esclusione
+if current_dir + '\n' not in exclude_paths:
+    # Aggiungi il path al file di esclusione
+    with open(exclude_file, 'a') as f:
+        f.write(current_dir + '\n')
+
 # nodir = open("excludes","r")
 # exc = nodir.read()
 # nodir.close()
