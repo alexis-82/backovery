@@ -345,7 +345,8 @@ def recovery():
         print()
         var_list = input("Digitare la lista dei pacchetti da installare: ")
         # qui andrebbe il nuovo codice per confrontare i due file packages
-        os.system("awk 'NR==FNR{a[$0];next}!($0 in a)' %s/%s %s/newsystem_packages.txt > packages_%s.txt" % (destinazione_pacchetti, var_list, destinazione_pacchetti, data))
+        os.system("chmod 666 %s/newsystem_packages.txt"  % destinazione_pacchetti)
+        os.system("awk 'NR==FNR{a[$0];next}!($0 in a)' %s/%s %s/newsystem_packages.txt > %s/packages_%s.txt" % (destinazione_pacchetti, var_list, destinazione_pacchetti, destinazione_pacchetti, data))
         os.system("rm %s/%s && rm %s/newsystem_packages.txt" % (destinazione_pacchetti, var_list, destinazione_pacchetti))
         # -------------------------------------------------------------------------- #
         print()
