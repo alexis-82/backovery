@@ -184,7 +184,7 @@ def backup():
                 print()
                 TMP_DIR = os.environ.get('TMP_DIR', 'tmp')
                 # esegui il dump di dconf
-                utente = input("Inserisci l'utente per eseguire il dump di dconf: ")
+                utente = input("Inserisci l'username per eseguire il dump di dconf: ")
                 os.system("runuser -u %s dconf dump / > %s/dump.conf" % (utente, TMP_DIR)) 
                 conf = input("Nominare il file di configurazione: (consigliato il nome del DE) ")
                 os.system("mv tmp/dump.conf tmp/%s_%s.conf" % (conf, data))
@@ -376,11 +376,18 @@ def recovery():
             print("Scelta non valida. Utilizzo cartella predefinita.")
             destinazione_config = "Backup"
         print()
+        print()
+        
+        utente = input("Inserisci l'username per eseguire il load di dconf: ")
+        print()
         os.system("cd %s && ls *.conf" % destinazione_config)
         print()
         conf = input("Digitare il file per la configurazione: ")
-        config_command = "dconf load / < %s/%s" % (destinazione_config, conf)
-        subprocess.call(config_command, shell=True)
+        os.system("runuser -u %s dconf load / < %s/%s" % (utente, destinazione_config, conf)) 
+        
+        #config_command = "dconf load / < %s/%s" % (destinazione_config, conf)
+        #subprocess.call(config_command, shell=True)
+        
         print()
         time.sleep(2)
         print()
