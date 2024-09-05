@@ -6,6 +6,7 @@ import sys
 import subprocess
 import time
 from lib import Fore, Back, Style, init
+import pwd
 
 if os.geteuid() != 0:
     print("Questo script deve essere eseguito come root.")
@@ -154,7 +155,6 @@ def backup():
             # Riconoscimento sistema
             print()
             print()
-            print()
             kernel = input("Vuoi rimuovere delle vecchie versioni di kernel per ottimizzare il backup? [si/no] ")
             if kernel == 'si' or kernel == 's':
                 print()
@@ -182,7 +182,12 @@ def backup():
                 time.sleep(2)
                 print("Esportazione del file di configurazione desktop")
                 print()
+                TMP_DIR = os.environ.get('TMP_DIR', 'tmp')
+                # esegui il dump di dconf
+                utente = input("Inserisci l'utente per eseguire il dump di dconf: ")
+                os.system("runuser -u %s dconf dump / > %s/dump.conf" % (utente, TMP_DIR)) 
                 conf = input("Nominare il file di configurazione: (consigliato il nome del DE) ")
+                os.system("mv tmp/dump.conf tmp/%s_%s.conf" % (conf, data))
                 print()
                 time.sleep(1)
                 # Scelta della destinazione del file di configurazione
@@ -193,14 +198,13 @@ def backup():
                 print()
                 scelta = input("Inserisci il numero della scelta: ")
                 if scelta == "1":
-                    destinazione = "Backup"
+                    os.system("mv tmp/%s_%s.conf Backup" % (conf, data))
                 elif scelta == "2":
                     destinazione = input("Inserisci il percorso della cartella di destinazione: ")
+                    os.system("mv tmp/%s_%s.conf %s" % (conf, data, destinazione))
                 else:
                     print("Scelta non valida. Utilizzo cartella predefinita.")
                     destinazione = "Backup"
-                config_command = "dconf dump / > %s/%s_%s.conf" % (destinazione, conf, data)
-                subprocess.call(config_command, shell=True)
                 print()
                 time.sleep(2)
                 # Scelta della destinazione del file di backup
@@ -342,7 +346,7 @@ def recovery():
         var_list = input("Digitare la lista dei pacchetti da installare: ")
         # qui andrebbe il nuovo codice per confrontare i due file packages
         os.system("comm -23 %s/%s %s/newsystem_packages.txt > %s/packages_%s.txt" % (destinazione, var_list, destinazione, destinazione, data))
-        os.system("rm %s/%s.txt && rm %s/newsystem_packages.txt && rm tmp/*" % (destinazione, var_list, destinazione))
+        os.system("rm %s/%s && rm %s/newsystem_packages.txt && rm tmp/*" % (destinazione, var_list, destinazione))
         # -------------------------------------------------------------------------- #
         print()
         time.sleep(2)
