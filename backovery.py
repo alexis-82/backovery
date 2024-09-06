@@ -101,19 +101,43 @@ def esporta():
         print()
         time.sleep(2)
         # Scelta della destinazione del file di esportazione
-        print("Scegli la destinazione del file di esportazione:")
         print()
-        print("1. Cartella predefinita (Backup)")
-        print("2. Altra cartella")
-        print()
-        scelta = input("Inserisci il numero della scelta: ")
-        if scelta == "1":
-            destinazione = "Backup"
-        elif scelta == "2":
-            destinazione = input("Inserisci il percorso della cartella di destinazione: ")
+        
+        while True:
+            print(f"\n{Fore.RED}Scegli la destinazione:{Fore.RESET}")
+            print()
+            print("1. Cartella predefinita (Backup)")
+            print("2. Altra cartella")
+            print()
+            print("0. Annulla e torna indietro")
+            print()
+            
+            try:
+                scelta = input("Inserisci il numero della scelta: ")
+                
+                if scelta == "0":
+                    print("Operazione annullata.")
+                    # Qui puoi aggiungere il codice per tornare al menu precedente o uscire
+                    break
+                elif scelta == "1":
+                    destinazione = "Backup"
+                    break
+                elif scelta == "2":
+                    destinazione = input("Inserisci il percorso della cartella di destinazione: ")
+                    if os.path.isdir(destinazione):
+                        break
+                    else:
+                        print("Il percorso inserito non è una cartella valida. Riprova.")
+                else:
+                    raise ValueError
+            except ValueError:
+                print("Scelta non valida. Per favore, seleziona 0, 1 o 2.")
+        
+        if 'destinazione' in locals():
+            print(f"Destinazione selezionata: {destinazione}")
         else:
-            print("Scelta non valida. Utilizzo cartella predefinita.")
-            destinazione = "Backup"
+            print("Nessuna destinazione selezionata.")
+            
         os.system("apt-mark showmanual | grep -vE 'linux-(generic|headers|image|modules)' > %s/packages_%s.txt" % (destinazione, data))
         os.system("sort %s/packages_%s.txt -o %s/all_packages_%s.txt" % (destinazione, data, destinazione, data))
         os.system("rm %s/packages_%s.txt" % (destinazione, data))
@@ -185,42 +209,88 @@ def backup():
                 TMP_DIR = os.environ.get('TMP_DIR', 'tmp')
                 # esegui il dump di dconf
                 utente = input("Inserisci l'username per eseguire il dump di dconf: ")
-                os.system("runuser -u %s dconf dump / > %s/dump.conf" % (utente, TMP_DIR)) 
+                os.system("runuser -u %s dconf dump / > %s/dump.conf" % (utente, TMP_DIR))
                 conf = input("Nominare il file di configurazione: (consigliato il nome del DE) ")
                 os.system("mv tmp/dump.conf tmp/%s_%s.conf" % (conf, data))
                 print()
                 time.sleep(1)
                 # Scelta della destinazione del file di configurazione
-                print("Scegli la destinazione del file di configurazione:")
-                print()
-                print("1. Cartella predefinita (Backup)")
-                print("2. Altra cartella")
-                print()
-                scelta = input("Inserisci il numero della scelta: ")
-                if scelta == "1":
-                    os.system("mv tmp/%s_%s.conf Backup" % (conf, data))
-                elif scelta == "2":
-                    destinazione = input("Inserisci il percorso della cartella di destinazione: ")
-                    os.system("mv tmp/%s_%s.conf %s" % (conf, data, destinazione))
+                
+                while True:
+                    print(f"\n{Fore.RED}Scegli la destinazione del file di configurazione:{Fore.RESET}")
+                    print()
+                    print("1. Cartella predefinita (Backup)")
+                    print("2. Altra cartella")
+                    print()
+                    print("0. Annulla e torna indietro")
+                    print()
+
+                    try:
+                        scelta = input("Inserisci il numero della scelta: ")
+
+                        if scelta == "0":
+                            print("Operazione annullata.")
+                            # Qui puoi aggiungere il codice per tornare al menu precedente o uscire
+                            break
+                        elif scelta == "1":
+                            os.system("mv tmp/%s_%s.conf Backup" % (conf, data))
+                            break
+                        elif scelta == "2":
+                            destinazione = input("Inserisci il percorso della cartella di destinazione: ")
+                            if os.path.isdir(destinazione):
+                                os.system("mv tmp/%s_%s.conf %s" % (conf, data, destinazione))
+                                break
+                            else:
+                                print("Il percorso inserito non è una cartella valida. Riprova.")
+                        else:
+                            raise ValueError
+                    except ValueError:
+                        print("Scelta non valida. Per favore, seleziona 0, 1 o 2.")
+
+                if 'destinazione' in locals():
+                    print(f"Destinazione del file di configurazione selezionata: {destinazione}")
                 else:
-                    print("Scelta non valida. Utilizzo cartella predefinita.")
-                    destinazione = "Backup"
+                    print("Nessuna destinazione del file di configurazione selezionata.")
+                    
                 print()
                 time.sleep(2)
+                
                 # Scelta della destinazione del file di backup
-                print("Scegli la destinazione del file di backup:")
-                print()
-                print("1. Cartella predefinita (Backup)")
-                print("2. Altra cartella")
-                print()
-                scelta = input("Inserisci il numero della scelta: ")
-                if scelta == "1":
-                    destinazione = "Backup"
-                elif scelta == "2":
-                    destinazione = input("Inserisci il percorso della cartella di destinazione: ")
+                while True:
+                    print(f"\n{Fore.RED}Scegli la destinazione del file di backup:{Fore.RESET}")
+                    print()
+                    print("1. Cartella predefinita (Backup)")
+                    print("2. Altra cartella")
+                    print()
+                    print("0. Annulla e torna indietro")
+                    print()
+
+                    try:
+                        scelta = input("Inserisci il numero della scelta: ")
+
+                        if scelta == "0":
+                            print("Operazione annullata.")
+                            # Qui puoi aggiungere il codice per tornare al menu precedente o uscire
+                            break
+                        elif scelta == "1":
+                            destinazione = "Backup"
+                            break
+                        elif scelta == "2":
+                            destinazione = input("Inserisci il percorso della cartella di destinazione: ")
+                            if os.path.isdir(destinazione):
+                                break
+                            else:
+                                print("Il percorso inserito non è una cartella valida. Riprova.")
+                        else:
+                            raise ValueError
+                    except ValueError:
+                        print("Scelta non valida. Per favore, seleziona 0, 1 o 2.")
+
+                if 'destinazione' in locals():
+                    print(f"Destinazione del file di backup selezionata: {destinazione}")
                 else:
-                    print("Scelta non valida. Utilizzo cartella predefinita.")
-                    destinazione = "Backup"
+                    print("Nessuna destinazione del file di backup selezionata.")
+                    
                 print()
                 time.sleep(1)
                 # Se si vuole una minor compressione sostituire il flag -cpzf con -cpf
@@ -290,19 +360,42 @@ def recovery():
         print((Fore.MAGENTA + "------------"))
         print()
         # Scelta della destinazione dei file di backup e pacchetti
-        print("Scegli la cartella dei file di backup:")
-        print()
-        print("1. Cartella predefinita (Backup)")
-        print("2. Altra cartella")
-        print()
-        scelta = input("Inserisci il numero della scelta: ")
-        if scelta == "1":
-            destinazione = "Backup"
-        elif scelta == "2":
-            destinazione = input("Inserisci il percorso della cartella: ")
+        
+        while True:
+            print(f"\n{Fore.RED}Scegli la cartella di destinazione:{Fore.RESET}")
+            print()
+            print("1. Cartella predefinita (Backup)")
+            print("2. Altra cartella")
+            print()
+            print("0. Annulla e torna indietro")
+            print()
+
+            try:
+                scelta = input("Inserisci il numero della scelta: ")
+
+                if scelta == "0":
+                    print("Operazione annullata.")
+                    # Qui puoi aggiungere il codice per tornare al menu precedente o uscire
+                    break
+                elif scelta == "1":
+                    destinazione = "Backup"
+                    break
+                elif scelta == "2":
+                    destinazione = input("Inserisci il percorso della cartella: ")
+                    if os.path.isdir(destinazione):
+                        break
+                    else:
+                        print("Il percorso inserito non è una cartella valida. Riprova.")
+                else:
+                    raise ValueError
+            except ValueError:
+                print("Scelta non valida. Per favore, seleziona 0, 1 o 2.")
+
+        if 'destinazione' in locals():
+            print(f"Cartella di destinazione selezionata: {destinazione}")
         else:
-            print("Scelta non valida. Utilizzo cartella predefinita.")
-            destinazione = "Backup"
+            print("Nessuna cartella di destinazione selezionata.")
+            
         print()
         input('Trasferire il file backup e file pacchetti nella cartella '+ Fore.RED + destinazione + Style.RESET_ALL +' e premere il tasto INVIO')
         print()
@@ -327,19 +420,40 @@ def recovery():
         print((Fore.MAGENTA + "------------------------------------"))
         print()
         # Scelta della destinazione del file di pacchetti
-        print("Scegli la cartella del file di pacchetti:")
-        print()
-        print("1. Cartella predefinita (Backup)")
-        print("2. Altra cartella")
-        print()
-        scelta_pacchetti = input("Inserisci il numero della scelta: ")
-        if scelta_pacchetti == "1":
-            destinazione_pacchetti = "Backup"
-        elif scelta_pacchetti == "2":
-            destinazione_pacchetti = input("Inserisci il percorso della cartella: ")
+        while True:
+            print(f"\n{Fore.RED}Scegli la cartella dei pacchetti:{Fore.RESET}")
+            print()
+            print("1. Cartella predefinita (Backup)")
+            print("2. Altra cartella")
+            print()
+            print("0. Annulla e torna indietro")
+            print()
+
+            try:
+                scelta_pacchetti = input("Inserisci il numero della scelta: ")
+
+                if scelta_pacchetti == "0":
+                    print("Operazione annullata.")
+                    # Qui puoi aggiungere il codice per tornare al menu precedente o uscire
+                    break
+                elif scelta_pacchetti == "1":
+                    destinazione_pacchetti = "Backup"
+                    break
+                elif scelta_pacchetti == "2":
+                    destinazione_pacchetti = input("Inserisci il percorso della cartella: ")
+                    if os.path.isdir(destinazione_pacchetti):
+                        break
+                    else:
+                        print("Il percorso inserito non è una cartella valida. Riprova.")
+                else:
+                    raise ValueError
+            except ValueError:
+                print("Scelta non valida. Per favore, seleziona 0, 1 o 2.")
+
+        if 'destinazione_pacchetti' in locals():
+            print(f"Cartella dei pacchetti selezionata: {destinazione_pacchetti}")
         else:
-            print("Scelta non valida. Utilizzo cartella predefinita.")
-            destinazione_pacchetti = "Backup"
+            print("Nessuna cartella dei pacchetti selezionata.")
         print()
         os.system("cd %s && ls all*.txt" % destinazione_pacchetti)
         print()
@@ -368,27 +482,51 @@ def recovery():
         print("1. Cartella predefinita (Backup)")
         print("2. Altra cartella")
         print()
-        scelta_config = input("Inserisci il numero della scelta: ")
-        if scelta_config == "1":
-            destinazione_config = "Backup"
-        elif scelta_config == "2":
-            destinazione_config = input("Inserisci il percorso della cartella: ")
+        while True:
+            print(f"\n{Fore.RED}Scegli la cartella del file di configurazione:{Fore.RESET}")
+            print("1. Cartella predefinita (Backup)")
+            print("2. Altra cartella")
+            print("0. Annulla e torna indietro")
+
+            try:
+                scelta_config = input("Inserisci il numero della scelta: ")
+
+                if scelta_config == "0":
+                    print("Operazione annullata.")
+                    # Qui puoi aggiungere il codice per tornare al menu precedente o uscire
+                    break
+                elif scelta_config == "1":
+                    destinazione_config = "Backup"
+                    break
+                elif scelta_config == "2":
+                    destinazione_config = input("Inserisci il percorso della cartella: ")
+                    if os.path.isdir(destinazione_config):
+                        break
+                    else:
+                        print("Il percorso inserito non è una cartella valida. Riprova.")
+                else:
+                    raise ValueError
+            except ValueError:
+                print("Scelta non valida. Per favore, seleziona 0, 1 o 2.")
+
+        if 'destinazione_config' in locals():
+            print(f"Cartella di configurazione selezionata: {destinazione_config}")
         else:
-            print("Scelta non valida. Utilizzo cartella predefinita.")
-            destinazione_config = "Backup"
+            print("Nessuna cartella di configurazione selezionata.")
         print()
         print()
-        
+
         utente = input("Inserisci l'username per eseguire il load di dconf: ")
         print()
         os.system("cd %s && ls *.conf" % destinazione_config)
         print()
         conf = input("Digitare il file per la configurazione: ")
-        os.system("runuser -u %s dconf load / < %s/%s" % (utente, destinazione_config, conf)) 
-        
-        #config_command = "dconf load / < %s/%s" % (destinazione_config, conf)
-        #subprocess.call(config_command, shell=True)
-        
+
+        # Esegui lo script separato come root, che preparerà il caricamento di dconf al prossimo login
+        os.system("python3 dconf_load_script.py {} {}/{}".format(utente, destinazione_config, conf))
+
+        print("Le impostazioni dconf verranno caricate al prossimo login dell'utente {}".format(utente))
+
         print()
         time.sleep(2)
         print()
@@ -422,7 +560,7 @@ def manager():
         print()
         print("[0] Indietro")
         print()
-        
+
         try:
             select2 = eval(input("Scegliere un opzione: "))
             if select2 >= 3:
@@ -439,7 +577,7 @@ def manager():
             os.system("python3 backovery.py")
         except UnboundLocalError:
             print("Sistema terminato")
-        
+
         if select2 == 1:
             print()
             print()
