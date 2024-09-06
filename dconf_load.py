@@ -63,5 +63,3 @@ with open(os.path.join(autostart_dir, "load_dconf_settings.desktop"), "w") as f:
 # Cambia il proprietario dei file creati all'utente specificato
 os.system("chown -R {0}:{0} {1}".format(username, user_temp_dir))
 os.system("chown {0}:{0} {1}/load_dconf_settings.desktop".format(username, autostart_dir))
-
-print("dconf settings prepared for loading at next login for user {}".format(username))

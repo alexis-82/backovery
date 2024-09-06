@@ -117,7 +117,7 @@ def esporta():
                 
                 if scelta == "0":
                     print("Operazione annullata.")
-                    # Qui puoi aggiungere il codice per tornare al menu precedente o uscire
+                    os.system("python3 backovery.py")
                     break
                 elif scelta == "1":
                     destinazione = "Backup"
@@ -169,14 +169,12 @@ def backup():
         os.system("apt-get autoremove 1>backup.log && apt-get clean 1>backup.log && apt-get autoclean 1>backup.log")
         os.system("rm -rf /tmp/*")
         os.system("rm -rf ~/.local/share/Trash/files/*")
-        print()
         # Stampa della barra di avanzamento per la pulizia del sistema
         passi = 10
         stampa_avanzamento(passi)
         print()
         time.sleep(1)
         while select:
-            # Riconoscimento sistema
             print()
             print()
             kernel = input("Vuoi rimuovere delle vecchie versioni di kernel per ottimizzare il backup? [si/no] ")
@@ -230,7 +228,7 @@ def backup():
 
                         if scelta == "0":
                             print("Operazione annullata.")
-                            # Qui puoi aggiungere il codice per tornare al menu precedente o uscire
+                            os.system("python3 backovery.py")
                             break
                         elif scelta == "1":
                             os.system("mv tmp/%s_%s.conf Backup" % (conf, data))
@@ -270,7 +268,7 @@ def backup():
 
                         if scelta == "0":
                             print("Operazione annullata.")
-                            # Qui puoi aggiungere il codice per tornare al menu precedente o uscire
+                            os.system("python3 backovery.py")
                             break
                         elif scelta == "1":
                             destinazione = "Backup"
@@ -375,7 +373,7 @@ def recovery():
 
                 if scelta == "0":
                     print("Operazione annullata.")
-                    # Qui puoi aggiungere il codice per tornare al menu precedente o uscire
+                    os.system("python3 backovery.py")
                     break
                 elif scelta == "1":
                     destinazione = "Backup"
@@ -434,7 +432,7 @@ def recovery():
 
                 if scelta_pacchetti == "0":
                     print("Operazione annullata.")
-                    # Qui puoi aggiungere il codice per tornare al menu precedente o uscire
+                    os.system("python3 backovery.py")
                     break
                 elif scelta_pacchetti == "1":
                     destinazione_pacchetti = "Backup"
@@ -477,15 +475,13 @@ def recovery():
         print((Fore.MAGENTA + "----------------------------"))
         print()
         # Scelta della destinazione del file di configurazione
-        print("Scegli la cartella del file di configurazione:")
-        print()
-        print("1. Cartella predefinita (Backup)")
-        print("2. Altra cartella")
         print()
         while True:
             print(f"\n{Fore.RED}Scegli la cartella del file di configurazione:{Fore.RESET}")
+            print()
             print("1. Cartella predefinita (Backup)")
             print("2. Altra cartella")
+            print()
             print("0. Annulla e torna indietro")
 
             try:
@@ -493,7 +489,7 @@ def recovery():
 
                 if scelta_config == "0":
                     print("Operazione annullata.")
-                    # Qui puoi aggiungere il codice per tornare al menu precedente o uscire
+                    os.system("python3 backovery.py")
                     break
                 elif scelta_config == "1":
                     destinazione_config = "Backup"
@@ -523,7 +519,7 @@ def recovery():
         conf = input("Digitare il file per la configurazione: ")
 
         # Esegui lo script separato come root, che preparerà il caricamento di dconf al prossimo login
-        os.system("python3 dconf_load_script.py {} {}/{}".format(utente, destinazione_config, conf))
+        os.system("python3 dconf_load.py {} {}/{}".format(utente, destinazione_config, conf))
 
         print("Le impostazioni dconf verranno caricate al prossimo login dell'utente {}".format(utente))
 
