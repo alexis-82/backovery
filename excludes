@@ -14,3 +14,13 @@ backup/*
 /cdrom
 /boot
 /swapfile
+/home/*/Downloads
+/home/*/Scaricati
+/home/*/.local/share/Trash
+
+# Altre esclusioni comuni
+.cache
+.trash
+.Trash
+tmp
+temp
