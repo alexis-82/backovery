@@ -59,7 +59,7 @@ print()
 print()
 print("Seleziona un numero")
 print()
-print("[1] Esporta pacchetti")
+print("[1] Esporta pacchetti e configurazioni")
 print()
 print("[2] Backup")
 print("[3] Backup Remoto")
@@ -100,31 +100,40 @@ def esporta():
         print("INIZIO PROCEDURA, NON INTERROMPERE...")
         print()
         time.sleep(2)
-        # Scelta della destinazione del file di esportazione
+        
+        print("Esportazione del file di configurazione desktop")
         print()
+        TMP_DIR = os.environ.get('TMP_DIR', 'tmp')
+        # esegui il dump di dconf
+        utente = input("Inserisci l'username per eseguire il dump di dconf: ")
+        os.system(f"runuser -u {utente} dconf dump / > {TMP_DIR}/dump.conf")
+        conf = input("Nominare il file di configurazione: (consigliato il nome del DE) ")
+        os.system(f"mv {TMP_DIR}/dump.conf {TMP_DIR}/{conf}_{data}.conf")
+        print()
+        time.sleep(1)
         
         while True:
-            print(f"\n{Fore.RED}Scegli la destinazione:{Fore.RESET}")
+            print(f"\n{Fore.RED}Scegli la destinazione del file di configurazione:{Fore.RESET}")
             print()
             print("1. Cartella predefinita (Backup)")
             print("2. Altra cartella")
             print()
             print("0. Annulla e torna indietro")
             print()
-            
             try:
                 scelta = input("Inserisci il numero della scelta: ")
-                
                 if scelta == "0":
                     print("Operazione annullata.")
                     os.system("python3 backovery.py")
-                    break
+                    return
                 elif scelta == "1":
                     destinazione = "Backup"
+                    os.system(f"mv {TMP_DIR}/{conf}_{data}.conf Backup")
                     break
                 elif scelta == "2":
                     destinazione = input("Inserisci il percorso della cartella di destinazione: ")
                     if os.path.isdir(destinazione):
+                        os.system(f"mv {TMP_DIR}/{conf}_{data}.conf {destinazione}")
                         break
                     else:
                         print("Il percorso inserito non è una cartella valida. Riprova.")
@@ -134,19 +143,23 @@ def esporta():
                 print("Scelta non valida. Per favore, seleziona 0, 1 o 2.")
         
         if 'destinazione' in locals():
-            print(f"Destinazione selezionata: {destinazione}")
+            print(f"Destinazione del file di configurazione selezionata: {destinazione}")
         else:
-            print("Nessuna destinazione selezionata.")
-            
-        os.system("apt-mark showmanual | grep -vE 'linux-(generic|headers|image|modules)' > %s/packages_%s.txt" % (destinazione, data))
-        os.system("sort %s/packages_%s.txt -o %s/all_packages_%s.txt" % (destinazione, data, destinazione, data))
-        os.system("rm %s/packages_%s.txt" % (destinazione, data))
+            print("Nessuna destinazione del file di configurazione selezionata.")
+        
+        print()
+        time.sleep(2)
+        
+        # Esportazione dei pacchetti
+        os.system(f"apt-mark showmanual | grep -vE 'linux-(generic|headers|image|modules)' > {destinazione}/packages_{data}.txt")
+        os.system(f"sort {destinazione}/packages_{data}.txt -o {destinazione}/all_packages_{data}.txt")
+        os.system(f"rm {destinazione}/packages_{data}.txt")
         print()
         time.sleep(1)
-        input("File generato, premere un tasto per tornare indietro!")
+        input("File generati, premere un tasto per tornare indietro!")
         os.system("clear && clear")
         os.system("python3 backovery.py")
-        return
+
 esporta()
 
 def stampa_avanzamento(passi):
@@ -165,7 +178,6 @@ def backup():
         print()
         time.sleep(1)
         print("PULIZIA DEL SISTEMA")
-        print()
         os.system("apt-get autoremove 1>backup.log && apt-get clean 1>backup.log && apt-get autoclean 1>backup.log")
         os.system("rm -rf /tmp/*")
         os.system("rm -rf ~/.local/share/Trash/files/*")
@@ -200,56 +212,6 @@ def backup():
                 print()
                 print()
                 print("Processo avviato...")
-                print()
-                time.sleep(2)
-                print("Esportazione del file di configurazione desktop")
-                print()
-                TMP_DIR = os.environ.get('TMP_DIR', 'tmp')
-                # esegui il dump di dconf
-                utente = input("Inserisci l'username per eseguire il dump di dconf: ")
-                os.system("runuser -u %s dconf dump / > %s/dump.conf" % (utente, TMP_DIR))
-                conf = input("Nominare il file di configurazione: (consigliato il nome del DE) ")
-                os.system("mv tmp/dump.conf tmp/%s_%s.conf" % (conf, data))
-                print()
-                time.sleep(1)
-                # Scelta della destinazione del file di configurazione
-                
-                while True:
-                    print(f"\n{Fore.RED}Scegli la destinazione del file di configurazione:{Fore.RESET}")
-                    print()
-                    print("1. Cartella predefinita (Backup)")
-                    print("2. Altra cartella")
-                    print()
-                    print("0. Annulla e torna indietro")
-                    print()
-
-                    try:
-                        scelta = input("Inserisci il numero della scelta: ")
-
-                        if scelta == "0":
-                            print("Operazione annullata.")
-                            os.system("python3 backovery.py")
-                            break
-                        elif scelta == "1":
-                            os.system("mv tmp/%s_%s.conf Backup" % (conf, data))
-                            break
-                        elif scelta == "2":
-                            destinazione = input("Inserisci il percorso della cartella di destinazione: ")
-                            if os.path.isdir(destinazione):
-                                os.system("mv tmp/%s_%s.conf %s" % (conf, data, destinazione))
-                                break
-                            else:
-                                print("Il percorso inserito non è una cartella valida. Riprova.")
-                        else:
-                            raise ValueError
-                    except ValueError:
-                        print("Scelta non valida. Per favore, seleziona 0, 1 o 2.")
-
-                if 'destinazione' in locals():
-                    print(f"Destinazione del file di configurazione selezionata: {destinazione}")
-                else:
-                    print("Nessuna destinazione del file di configurazione selezionata.")
-                    
                 print()
                 time.sleep(2)
                 

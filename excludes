@@ -23,4 +23,5 @@ backup/*
 .trash
 .Trash
 tmp
-temp
+
+
